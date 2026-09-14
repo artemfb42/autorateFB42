@@ -11,10 +11,10 @@
 
 | № | ПІБ | GitHub-логін | Контакт (E-mail) | Сильні сторони |
 | :-: | :--- | :--- | :--- | :--- |
-| 1 | **Фощій Дмитро** | `@fb42dima` | `foshchii.dmytro_fb42@edu.kpi.ua` | |
-| 2 | **Бурмай Юлія** | `@b-yuliia ` | `burmai.yuliia_fb42@edu.kpi.ua ` |  |
+| 1 | **Фощій Дмитро Олександрович** | `@fb42dima` | `foshchii.dmytro_fb42@edu.kpi.ua` | |
+| 2 | **Бурмай Юлія Володимирівна** | `@b-yuliia ` | `burmai.yuliia_fb42@edu.kpi.ua ` |  |
 | 3 | **Найда Владислав** | ` ` | ` ` |  |
-| 4 | **Собко Артем** | `@artemfb42 ` | `sobko.artem_fb42@edu.kpi.ua ` |  |
+| 4 | **Собко Артем Кирилович** | `@artemfb42 ` | `sobko.artem_fb42@edu.kpi.ua ` |  |
 | 5 | **Деркач Юрій** | ` ` | ` ` |  |
 
 ---
