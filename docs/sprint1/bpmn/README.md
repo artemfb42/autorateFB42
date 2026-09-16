@@ -32,9 +32,9 @@
 
 ## Супровідні документи та посилання
 
-* **Опис продуктів та процесів:** [product.md]
+* **Опис продуктів та процесів:** [product.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/product.md)
 * **Протокол рецензування моделей:** [review.md]
 * **Беклог вимог (User Stories):** [backlog.xlsx / backlog.md]
-* **Таблиця задач:** [tasks.md]
+* **Таблиця задач:** [tasks.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/tasks.md)
 * **Статут команди:** [`../team/charter.md`](https://github.com/artemfb42/autorateFB42/blob/main/docs/team/charter.md)
 * **Ретроспектива:** [retro.md]
