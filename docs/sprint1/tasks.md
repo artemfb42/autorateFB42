@@ -22,7 +22,7 @@
 | 4.4 | -- Створення BPMN-моделі "Додавання нової моделі в каталог" | ІТ | Собко | 1,5 |  | В роботі | [diagramtabl4.bpmn](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl4.bpmn) , [diagramtabl4.svg](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl4.svg) | Бурмай |
 | 5 | **Створення README.md з інструкцією до теки bpmn** | СМ | Бурмай | 0,5 |  | В роботі | Посилання на [README.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/README.md) | Фощій |
 | 6 | **Аудит та рецензування специфікацій вимог і моделей BPMN** |  АО | Деркач | 3,5 | | В роботі | Посилання на теку [bpmn](https://github.com/artemfb42/autorateFB42/tree/main/docs/sprint1/bpmn) | Бурмай |
-| 6.1 | -- Перевірка відповідності BPMN-моделей (1-4) | АО | Деркач | 3 | 3,5 | Готово |  | Собко |
+| 6.1 | -- Перевірка відповідності BPMN-моделей (1-4) | АО | Деркач | 3 |  | В роботі |  | Собко |
 | 6.2| -- Перевірка інструкції README.md до теки bpmn | АО | Деркач | 0,5| | В роботі | Інструкція [README.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/README.md) | Собко |
 | 7 | **Створення статуту команди - charter.md** | СМ | Бурмай | 1 | 1,5 | На рецензії | Посилання на [charter.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/team/charter.md) | Фощій |
 | 8 | **Створення беклог вимог (user stories) до "Особистий кабінет та рейтинг тижня"** | ТА | Найда | 3 | | В роботі| | Фощій| 
