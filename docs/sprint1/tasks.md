@@ -3,7 +3,7 @@
 **Команда:** $Win    
 **Продукт:** Онлайн-каталог автомобілів та медіа-платформа «АвтоРейт» (autorate)  
 **Дата планування:** 15.09   
-**Дата останнього оновлення:** 17.09
+**Дата останнього оновлення:** 24.09
 
 ---
 
@@ -16,24 +16,24 @@
 | 1.4 | -- Створення, оновлення та перевірка посилань (розділ 5) | КТ | Фощій | 0,5 | 0,5 | Готово | Розд. 5 [product.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/product.md) | Бурмай |
 | 2 |  **Підготовка робочого простору в репозиторії "autorateFB42"** | ІТ | Собко | 0,5 | 0,5 | Готово | Посилання на репозиторій [autorateFB42](https://github.com/artemfb42/autorateFB42) | Фощій |
 | 3 | **Перевірка робочого простору та інкременту на відповідність замовленню** | АО | Деркач | 1,5 | | В роботі |  | Фощій |
-| 4 | **Створення BPMN-моделей процесів проекту** | ІТ | Собко | 6 | 6 | Готово | Посилання на теку [bpmn](https://github.com/artemfb42/autorateFB42/tree/main/docs/sprint1/bpmn) | Бурмай|
-| 4.1 | -- Створення BPMN-моделі процесу "Реєстрація і вхід" | ІТ | Собко | 1,5 | 2 | Готово | [diagramtabl1.bpmn](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl1.bpmn) , [diagramtabl1.svg](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl1.svg)| Бурмай |
-| 4.2 | -- Створення BPMN-моделі "Пошук та перегляд каталогу" | ТА | Найда | 1,5 | 1,5 | Готово | [diagramtabl2.bpmn](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl2.bpmn) , [diagramtabl2.svg](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl2.svg)| Бурмай |
-| 4.3 | -- Створення BPMN-моделі "Голосування та коментування" | ІТ | Собко | 1,5 | 1,5 | Готово | [diagramtabl3.bpmn](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl3.bpmn) , [diagramtabl3.svg](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl3.svg) | Бурмай |
-| 4.4 | -- Створення BPMN-моделі "Додавання нової моделі в каталог" | ІТ | Собко | 1,5 | 1 | Готово | [diagramtabl4.bpmn](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl4.bpmn) , [diagramtabl4.svg](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl4.svg) | Бурмай |
+| 4 | **Створення BPMN-моделей процесів проекту** | ІТ | Собко | 6 | 6 | На рецензії | Посилання на теку [../sprint1/bpmn](https://github.com/artemfb42/autorateFB42/tree/main/docs/sprint1/bpmn) | Бурмай|
+| 4.1 | -- Створення BPMN-моделі процесу "Реєстрація і вхід" | ІТ | Собко | 1,5 | 2 | На рецензії  | [diagramtabl1.bpmn](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl1.bpmn) , [diagramtabl1.svg](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl1.svg)| Бурмай |
+| 4.2 | -- Створення BPMN-моделі "Модерація коментарів" | ТА | Найда | 1,5 | 1,5 | На рецензії | [diagramtabl2.bpmn](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl2.bpmn) , [diagramtabl2.svg](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl2.svg)| Бурмай |
+| 4.3 | -- Створення BPMN-моделі "Голосування та коментування" | ІТ | Собко | 1,5 | 1,5 | На рецензії | [diagramtabl3.bpmn](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl3.bpmn) , [diagramtabl3.svg](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl3.svg) | Бурмай |
+| 4.4 | -- Створення BPMN-моделі "Додавання нової моделі в каталог" | ІТ | Собко | 1,5 | 1 | На рецензії | [diagramtabl4.bpmn](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl4.bpmn) , [diagramtabl4.svg](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/diagramtabl4.svg) | Бурмай |
 | 5 | **Створення README.md з інструкцією до теки bpmn** | СМ | Бурмай | 0,5 | 0,5 | Готово | Посилання на [README.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/README.md) | Фощій |
-| 6 | **Аудит та рецензування специфікацій вимог і моделей BPMN** |  АО | Деркач | 3,5 | | В роботі | Посилання на теку [bpmn](https://github.com/artemfb42/autorateFB42/tree/main/docs/sprint1/bpmn) | Бурмай |
+| 6 | **Аудит та рецензування специфікацій вимог і моделей BPMN** |  АО | Деркач | 3,5 | | В роботі | Посилання на теку [../sprint1/bpmn](https://github.com/artemfb42/autorateFB42/tree/main/docs/sprint1/bpmn) | Бурмай |
 | 6.1 | -- Перевірка відповідності BPMN-моделей (1-4) | АО | Деркач | 3 |  | В роботі |  | Собко |
 | 6.2| -- Перевірка інструкції README.md до теки bpmn | АО | Деркач | 0,5 | 0,5 | Готово | Інструкція [README.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/README.md) | Собко |
 | 7 | **Створення статуту команди - charter.md** | СМ | Бурмай | 1 | 1,5 | На рецензії | Посилання на [charter.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/team/charter.md) | Фощій |
-| 8 | **Створення беклог вимог (user stories) до "Особистий кабінет та рейтинг тижня"** | ТА | Найда | 3 | 3 | Готово | Посилання на таблицю: [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md) | Фощій | 
-| 8.1 |  -- Створення історій до ролі "Зареєстрований користувач" | ТА | Найда | 1 | 1 | Готово | [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md) | Фощій |
-| 8.2 | -- Створення історій до ролі "Модератор" | ТА | Найда | 0,5 | 0,5  | Готово | [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md) | Фощій |
-| 8.3 | -- Створення історій до ролі "Відвідувач" | ТА | Найда | 0,5 | 0,5  | Готово | [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md) | Фощій |
-| 8.4 | -- Створення історій до ролі "Адміністратор каналу" | ТА | Найда | 0,5 | 0,5 | Готово | [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md) | Фощій |
-| 8.5 | -- Визначення статусів для кожної з історій | ТА | Найда | 0,5 | 0,5 | Готово | [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md) | Фощій |  
+| 8 | **Створення беклог вимог (user stories) до "Особистий кабінет та рейтинг тижня"** | ТА | Найда | 3 |  | В роботі | Посилання на таблицю: [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md) | Фощій | 
+| 8.1 |  -- Створення історій до ролі "Зареєстрований користувач" | ТА | Найда | 1 |  | В роботі | [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md) | Фощій |
+| 8.2 | -- Створення історій до ролі "Модератор" | ТА | Найда | 0,5 |  | В роботі | [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md) | Фощій |
+| 8.3 | -- Створення історій до ролі "Відвідувач" | ТА | Найда | 0,5 |   | В роботі | [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md) | Фощій |
+| 8.4 | -- Створення історій до ролі "Адміністратор каналу" | ТА | Найда | 0,5 |  | В роботі | [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md) | Фощій |
+| 8.5 | -- Визначення статусів для кожної з історій | ТА | Найда | 0,5 |  | В роботі | [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md) | Фощій |  
 | 9 | **Підготовка переліку запитань замовника** | АО | Деркач | 1,5 | | Заплановано | | Бурмай |  
-| 10 | **Створення протоколу ретроспективи `retro.md`** | СМ | Бурмай | 0,5 | | В роботі |  | Фощій |
+| 10 | **Створення протоколу ретроспективи `retro.md`** | СМ | Бурмай | 0,5 | | В роботі | Посилання на: [retro.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/retro.md) | Фощій |
 
 ---
 
