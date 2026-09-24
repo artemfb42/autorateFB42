@@ -172,8 +172,8 @@
 6. **Інструментарій модератора:** Відображення показника репутації користувача поруч із його коментарем у черзі модерації для швидшого прийняття рішень щодо блокування чи видалення.
 
 ## 5. Посилання
-* **BPMN-діаграми:** [README.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/tasks.md)
-* **Беклог вимог (User Stories):** [backlog.xlsx / backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.xlsx)
-* **Протокол рецензування моделей:** [bpmn/review.md] (https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/review.md)
+* **BPMN-діаграми:** [`../sprint1/bpmn`](https://github.com/artemfb42/autorateFB42/tree/main/docs/sprint1/bpmn)
+* **Беклог вимог (User Stories):** [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md)
+* **Протокол рецензування моделей:** [`../bpmn/review.md`](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/review.md)
 * **Статут команди (Charter):** [`../team/charter.md`](https://github.com/artemfb42/autorateFB42/blob/main/docs/team/charter.md)
 * **Таблиця задач (Tasks):** [tasks.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/tasks.md)
