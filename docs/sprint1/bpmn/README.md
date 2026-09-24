@@ -11,8 +11,9 @@
 * **Формати файлів:**
   * `.bpmn` — вихідні файли діаграм у форматі XML.
   * `.SVG` — графічні експорти для швидкого перегляду.
+  * `.pdf` — завантаження діаграм в зручному форматі.
 * **Як відкрити вихідний файл:**
-1. Зайдіть на [bpmn.io](https://demo.bpmn.io/) або [draw.io](https://app.diagrams.net/).
+1. Зайдіть на [bpmn.io](https://demo.bpmn.io/).
 2. Перетягніть необхідний `.bpmn` файл із цієї папки у вікно браузера.
 
 ---
@@ -33,8 +34,8 @@
 ## Супровідні документи та посилання
 
 * **Опис продуктів та процесів:** [product.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/product.md)
-* **Протокол рецензування моделей:** [review.md]
-* **Беклог вимог (User Stories):** [backlog.xlsx / backlog.md]
+* **Протокол рецензування моделей:** [`../bpmn/review.md`](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/review.md)
+* **Беклог вимог (User Stories):** [backlog.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/backlog.md)
 * **Таблиця задач:** [tasks.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/tasks.md)
 * **Статут команди:** [`../team/charter.md`](https://github.com/artemfb42/autorateFB42/blob/main/docs/team/charter.md)
-* **Ретроспектива:** [retro.md]
+* **Ретроспектива:** [retro.md](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/retro.md)
