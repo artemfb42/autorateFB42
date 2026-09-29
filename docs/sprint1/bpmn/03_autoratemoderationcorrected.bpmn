@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_AutoRate_Moderation" targetNamespace="https://autorate.example/bpmn/moderation" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="18.30.1">
+  <message id="M_New" name="Новий коментар на модерацію" />
+  <message id="M_Report" name="Скарга на коментар" />
+  <message id="M_Warning" name="Попередження користувачу" />
+  <collaboration id="Collaboration_Moderation">
+    <participant id="P_AutoRate" name="АвтоРейт" processRef="Proc_AutoRate" />
+    <participant id="P_User" name="Користувач" processRef="Proc_User" />
+    <messageFlow id="MF_Warning" sourceRef="Warn" targetRef="UserReceives" messageRef="M_Warning" />
+  </collaboration>
+  <process id="Proc_AutoRate" isExecutable="false">
+    <laneSet id="LaneSet_AutoRate">
+      <lane id="Lane_System" name="Система">
+        <flowNodeRef>Approve</flowNodeRef>
+        <flowNodeRef>LogApprove</flowNodeRef>
+        <flowNodeRef>Approved</flowNodeRef>
+        <flowNodeRef>Hide</flowNodeRef>
+        <flowNodeRef>LogHide</flowNodeRef>
+        <flowNodeRef>Hidden</flowNodeRef>
+        <flowNodeRef>Delete</flowNodeRef>
+        <flowNodeRef>Warn</flowNodeRef>
+        <flowNodeRef>Repeat</flowNodeRef>
+        <flowNodeRef>LogDelete</flowNodeRef>
+        <flowNodeRef>Deleted</flowNodeRef>
+        <flowNodeRef>Block</flowNodeRef>
+        <flowNodeRef>LogBlock</flowNodeRef>
+        <flowNodeRef>Blocked</flowNodeRef>
+      </lane>
+      <lane id="Lane_Moderator" name="Модератор">
+        <flowNodeRef>New</flowNodeRef>
+        <flowNodeRef>Report</flowNodeRef>
+        <flowNodeRef>Open</flowNodeRef>
+        <flowNodeRef>Review</flowNodeRef>
+        <flowNodeRef>Decision</flowNodeRef>
+      </lane>
+    </laneSet>
+    <task id="Approve" name="Позначити коментар як схвалений">
+      <incoming>F05</incoming>
+      <outgoing>F06</outgoing>
+    </task>
+    <task id="LogApprove" name="Записати схвалення у журнал">
+      <incoming>F06</incoming>
+      <outgoing>F07</outgoing>
+      <dataOutputAssociation id="DataOutputAssociation_0g229q3">
+        <targetRef>Journal</targetRef>
+      </dataOutputAssociation>
+    </task>
+    <endEvent id="Approved" name="Коментар схвалено">
+      <incoming>F07</incoming>
+    </endEvent>
+    <task id="Hide" name="Приховати коментар">
+      <incoming>F08</incoming>
+      <outgoing>F09</outgoing>
+    </task>
+    <task id="LogHide" name="Записати приховування у журнал">
+      <incoming>F09</incoming>
+      <outgoing>F10</outgoing>
+    </task>
+    <endEvent id="Hidden" name="Коментар приховано">
+      <incoming>F10</incoming>
+    </endEvent>
+    <task id="Delete" name="Видалити коментар">
+      <incoming>F11</incoming>
+      <outgoing>F12</outgoing>
+    </task>
+    <sendTask id="Warn" name="Надіслати користувачу попередження" messageRef="M_Warning">
+      <incoming>F12</incoming>
+      <outgoing>F13</outgoing>
+    </sendTask>
+    <exclusiveGateway id="Repeat" name="Це повторне порушення?" default="F14">
+      <incoming>F13</incoming>
+      <outgoing>F14</outgoing>
+      <outgoing>F16</outgoing>
+    </exclusiveGateway>
+    <task id="LogDelete" name="Записати видалення й попередження у журнал">
+      <incoming>F14</incoming>
+      <outgoing>F15</outgoing>
+    </task>
+    <endEvent id="Deleted" name="Коментар видалено з попередженням">
+      <incoming>F15</incoming>
+    </endEvent>
+    <task id="Block" name="Заблокувати користувача">
+      <incoming>F16</incoming>
+      <outgoing>F17</outgoing>
+    </task>
+    <task id="LogBlock" name="Записати блокування у журнал">
+      <incoming>F17</incoming>
+      <outgoing>F18</outgoing>
+      <dataOutputAssociation id="DataOutputAssociation_1g11blr">
+        <targetRef>Journal</targetRef>
+      </dataOutputAssociation>
+    </task>
+    <endEvent id="Blocked" name="Користувача заблоковано">
+      <incoming>F18</incoming>
+    </endEvent>
+    <dataObjectReference id="Journal" name="Журнал модерації" dataObjectRef="ModerationJournal" />
+    <dataObject id="ModerationJournal" />
+    <startEvent id="New" name="Отримано новий коментар на модерацію">
+      <outgoing>F01</outgoing>
+      <messageEventDefinition id="New_MessageEvent" messageRef="M_New" />
+    </startEvent>
+    <startEvent id="Report" name="Отримано скаргу на коментар">
+      <outgoing>F02</outgoing>
+      <messageEventDefinition id="Report_MessageEvent" messageRef="M_Report" />
+    </startEvent>
+    <task id="Open" name="Відкрити чергу та прочитати коментар">
+      <incoming>F01</incoming>
+      <incoming>F02</incoming>
+      <outgoing>F03</outgoing>
+    </task>
+    <task id="Review" name="Перевірити коментар і репутацію автора">
+      <incoming>F03</incoming>
+      <outgoing>F04</outgoing>
+    </task>
+    <exclusiveGateway id="Decision" name="Яке рішення щодо коментаря?" default="F11">
+      <incoming>F04</incoming>
+      <outgoing>F05</outgoing>
+      <outgoing>F08</outgoing>
+      <outgoing>F11</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="F05" name="Схвалити" sourceRef="Decision" targetRef="Approve" />
+    <sequenceFlow id="F06" sourceRef="Approve" targetRef="LogApprove" />
+    <sequenceFlow id="F07" sourceRef="LogApprove" targetRef="Approved" />
+    <sequenceFlow id="F08" name="Приховати" sourceRef="Decision" targetRef="Hide" />
+    <sequenceFlow id="F09" sourceRef="Hide" targetRef="LogHide" />
+    <sequenceFlow id="F10" sourceRef="LogHide" targetRef="Hidden" />
+    <sequenceFlow id="F11" name="Видалити з попередженням" sourceRef="Decision" targetRef="Delete" />
+    <sequenceFlow id="F12" sourceRef="Delete" targetRef="Warn" />
+    <sequenceFlow id="F13" sourceRef="Warn" targetRef="Repeat" />
+    <sequenceFlow id="F14" name="Ні" sourceRef="Repeat" targetRef="LogDelete" />
+    <sequenceFlow id="F16" name="Так" sourceRef="Repeat" targetRef="Block" />
+    <sequenceFlow id="F15" sourceRef="LogDelete" targetRef="Deleted" />
+    <sequenceFlow id="F17" sourceRef="Block" targetRef="LogBlock" />
+    <sequenceFlow id="F18" sourceRef="LogBlock" targetRef="Blocked" />
+    <sequenceFlow id="F01" sourceRef="New" targetRef="Open" />
+    <sequenceFlow id="F02" sourceRef="Report" targetRef="Open" />
+    <sequenceFlow id="F03" sourceRef="Open" targetRef="Review" />
+    <sequenceFlow id="F04" sourceRef="Review" targetRef="Decision" />
+    <association id="A2" sourceRef="LogHide" targetRef="Journal" />
+    <association id="A3" sourceRef="LogDelete" targetRef="Journal" />
+  </process>
+  <process id="Proc_User" isExecutable="false">
+    <startEvent id="UserReceives" name="Отримано попередження від модератора">
+      <outgoing>F19</outgoing>
+      <messageEventDefinition id="UserReceives_MessageEvent" messageRef="M_Warning" />
+    </startEvent>
+    <endEvent id="UserRead" name="Ознайомлено з попередженням">
+      <incoming>F19</incoming>
+    </endEvent>
+    <sequenceFlow id="F19" sourceRef="UserReceives" targetRef="UserRead" />
+  </process>
+  <bpmndi:BPMNDiagram id="Diagram_Moderation">
+    <bpmndi:BPMNPlane id="Plane_Moderation" bpmnElement="Collaboration_Moderation">
+      <bpmndi:BPMNShape id="P_AutoRate_di" bpmnElement="P_AutoRate" isHorizontal="true">
+        <omgdc:Bounds x="160" y="40" width="1900" height="630" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_System_di" bpmnElement="Lane_System" isHorizontal="true">
+        <omgdc:Bounds x="190" y="240" width="1870" height="430" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Moderator_di" bpmnElement="Lane_Moderator" isHorizontal="true">
+        <omgdc:Bounds x="190" y="40" width="1870" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Approve_di" bpmnElement="Approve">
+        <omgdc:Bounds x="910" y="260" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="LogApprove_di" bpmnElement="LogApprove">
+        <omgdc:Bounds x="1120" y="260" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Approved_di" bpmnElement="Approved">
+        <omgdc:Bounds x="1320" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1313" y="318" width="50" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Hide_di" bpmnElement="Hide">
+        <omgdc:Bounds x="910" y="365" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="LogHide_di" bpmnElement="LogHide">
+        <omgdc:Bounds x="1120" y="365" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Hidden_di" bpmnElement="Hidden">
+        <omgdc:Bounds x="1320" y="387" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1311" y="423" width="54" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Delete_di" bpmnElement="Delete">
+        <omgdc:Bounds x="910" y="485" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Warn_di" bpmnElement="Warn">
+        <omgdc:Bounds x="1120" y="485" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Repeat_di" bpmnElement="Repeat" isMarkerVisible="true">
+        <omgdc:Bounds x="1320" y="500" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1313" y="550" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="LogDelete_di" bpmnElement="LogDelete">
+        <omgdc:Bounds x="1435" y="535" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Deleted_di" bpmnElement="Deleted">
+        <omgdc:Bounds x="1645" y="557" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1622" y="510" width="82" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Block_di" bpmnElement="Block">
+        <omgdc:Bounds x="1435" y="415" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="LogBlock_di" bpmnElement="LogBlock">
+        <omgdc:Bounds x="1645" y="415" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Blocked_di" bpmnElement="Blocked">
+        <omgdc:Bounds x="1855" y="437" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1841" y="473" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Journal_di" bpmnElement="Journal">
+        <omgdc:Bounds x="1960" y="375" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1953" y="425" width="51" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="New_di" bpmnElement="New">
+        <omgdc:Bounds x="260" y="72" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="235" y="108" width="86" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Report_di" bpmnElement="Report">
+        <omgdc:Bounds x="260" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="234" y="218" width="88" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Open_di" bpmnElement="Open">
+        <omgdc:Bounds x="375" y="110" width="145" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Review_di" bpmnElement="Review">
+        <omgdc:Bounds x="570" y="110" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Decision_di" bpmnElement="Decision" isMarkerVisible="true">
+        <omgdc:Bounds x="795" y="125" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="788" y="75" width="64" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="F01_di" bpmnElement="F01">
+        <omgdi:waypoint x="296" y="90" />
+        <omgdi:waypoint x="330" y="90" />
+        <omgdi:waypoint x="330" y="150" />
+        <omgdi:waypoint x="375" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F02_di" bpmnElement="F02">
+        <omgdi:waypoint x="296" y="200" />
+        <omgdi:waypoint x="330" y="200" />
+        <omgdi:waypoint x="330" y="150" />
+        <omgdi:waypoint x="375" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F03_di" bpmnElement="F03">
+        <omgdi:waypoint x="520" y="150" />
+        <omgdi:waypoint x="570" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F04_di" bpmnElement="F04">
+        <omgdi:waypoint x="730" y="150" />
+        <omgdi:waypoint x="795" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F05_di" bpmnElement="F05">
+        <omgdi:waypoint x="845" y="150" />
+        <omgdi:waypoint x="870" y="150" />
+        <omgdi:waypoint x="870" y="300" />
+        <omgdi:waypoint x="910" y="300" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="855" y="303" width="50" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F06_di" bpmnElement="F06">
+        <omgdi:waypoint x="1060" y="300" />
+        <omgdi:waypoint x="1120" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F07_di" bpmnElement="F07">
+        <omgdi:waypoint x="1270" y="300" />
+        <omgdi:waypoint x="1320" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F08_di" bpmnElement="F08">
+        <omgdi:waypoint x="820" y="175" />
+        <omgdi:waypoint x="820" y="405" />
+        <omgdi:waypoint x="910" y="405" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="832" y="383" width="55" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F09_di" bpmnElement="F09">
+        <omgdi:waypoint x="1060" y="405" />
+        <omgdi:waypoint x="1120" y="405" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F10_di" bpmnElement="F10">
+        <omgdi:waypoint x="1270" y="405" />
+        <omgdi:waypoint x="1320" y="405" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F11_di" bpmnElement="F11">
+        <omgdi:waypoint x="807" y="162" />
+        <omgdi:waypoint x="760" y="190" />
+        <omgdi:waypoint x="760" y="525" />
+        <omgdi:waypoint x="910" y="525" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="779" y="496" width="82" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F12_di" bpmnElement="F12">
+        <omgdi:waypoint x="1060" y="525" />
+        <omgdi:waypoint x="1120" y="525" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F13_di" bpmnElement="F13">
+        <omgdi:waypoint x="1270" y="525" />
+        <omgdi:waypoint x="1320" y="525" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F14_di" bpmnElement="F14">
+        <omgdi:waypoint x="1370" y="525" />
+        <omgdi:waypoint x="1400" y="525" />
+        <omgdi:waypoint x="1400" y="575" />
+        <omgdi:waypoint x="1435" y="575" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1410" y="540" width="11" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F15_di" bpmnElement="F15">
+        <omgdi:waypoint x="1595" y="575" />
+        <omgdi:waypoint x="1645" y="575" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F16_di" bpmnElement="F16">
+        <omgdi:waypoint x="1345" y="500" />
+        <omgdi:waypoint x="1345" y="455" />
+        <omgdi:waypoint x="1435" y="455" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1351" y="468" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F17_di" bpmnElement="F17">
+        <omgdi:waypoint x="1595" y="455" />
+        <omgdi:waypoint x="1645" y="455" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F18_di" bpmnElement="F18">
+        <omgdi:waypoint x="1805" y="455" />
+        <omgdi:waypoint x="1855" y="455" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="A2_di" bpmnElement="A2">
+        <omgdi:waypoint x="1195" y="365" />
+        <omgdi:waypoint x="1195" y="355" />
+        <omgdi:waypoint x="1925" y="355" />
+        <omgdi:waypoint x="1925" y="400" />
+        <omgdi:waypoint x="1960" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="A3_di" bpmnElement="A3">
+        <omgdi:waypoint x="1515" y="615" />
+        <omgdi:waypoint x="1515" y="630" />
+        <omgdi:waypoint x="2020" y="630" />
+        <omgdi:waypoint x="2020" y="400" />
+        <omgdi:waypoint x="1996" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="P_User_di" bpmnElement="P_User" isHorizontal="true">
+        <omgdc:Bounds x="160" y="690" width="1900" height="115" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserReceives_di" bpmnElement="UserReceives">
+        <omgdc:Bounds x="1177" y="720" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1156" y="756" width="79" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserRead_di" bpmnElement="UserRead">
+        <omgdc:Bounds x="1420" y="720" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1397" y="756" width="82" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="F19_di" bpmnElement="F19">
+        <omgdi:waypoint x="1213" y="738" />
+        <omgdi:waypoint x="1420" y="738" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MF_Warning_di" bpmnElement="MF_Warning">
+        <omgdi:waypoint x="1195" y="565" />
+        <omgdi:waypoint x="1195" y="720" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_0g229q3_di" bpmnElement="DataOutputAssociation_0g229q3">
+        <omgdi:waypoint x="1270" y="270" />
+        <omgdi:waypoint x="1978" y="270" />
+        <omgdi:waypoint x="1978" y="375" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_1g11blr_di" bpmnElement="DataOutputAssociation_1g11blr">
+        <omgdi:waypoint x="1804" y="420" />
+        <omgdi:waypoint x="1820" y="420" />
+        <omgdi:waypoint x="1940" y="420" />
+        <omgdi:waypoint x="1960" y="420" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_AutoRate_Compact" targetNamespace="https://autorate.example/bpmn/sprint1" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="18.30.1">
+  <collaboration id="Collaboration_Compact">
+    <participant id="P_User" name="Користувач" processRef="Proc_User" />
+    <participant id="P_System" name="АвтоРейт" processRef="Proc_System" />
+    <messageFlow id="M1" sourceRef="U_RegSubmit" targetRef="S_RegStart" />
+    <messageFlow id="M2" sourceRef="S_RegOK" targetRef="U_RegOK" />
+    <messageFlow id="M3" sourceRef="S_RegFail" targetRef="U_RegFail" />
+    <messageFlow id="M4" sourceRef="U_LoginSubmit" targetRef="S_LoginStart" />
+    <messageFlow id="M5" sourceRef="S_SendResult" targetRef="U_LoginReceive" />
+    <messageFlow id="M6" sourceRef="S_SendBlock" targetRef="U_LoginReceive" />
+    <messageFlow id="M7" sourceRef="S_SendBlocked" targetRef="U_LoginReceive" />
+    <textAnnotation id="Note_Rules">
+      <text>Результат входу містить статус: успіх, невірні дані або чинне блокування. На третій невдалій спробі блокування триває 15 хвилин.</text>
+    </textAnnotation>
+    <association id="Assoc_Rules" sourceRef="S_Limit" targetRef="Note_Rules" />
+  </collaboration>
+  <process id="Proc_User" isExecutable="false">
+    <startEvent id="U_RegStart" name="Реєстрацію розпочато">
+      <outgoing>U1</outgoing>
+    </startEvent>
+    <sendTask id="U_RegSubmit" name="Ввести й надіслати дані реєстрації" messageRef="M_RegRequest">
+      <incoming>U1</incoming>
+      <outgoing>U2</outgoing>
+    </sendTask>
+    <endEvent id="U_RegDone" name="Реєстрацію завершено">
+      <incoming>U5</incoming>
+    </endEvent>
+    <intermediateCatchEvent id="U_RegFail" name="Отримано відмову">
+      <incoming>U4</incoming>
+      <outgoing>U6</outgoing>
+      <messageEventDefinition id="U_RegFail_definition" messageRef="M_RegFail" />
+    </intermediateCatchEvent>
+    <endEvent id="U_RegRejected" name="Реєстрацію відхилено">
+      <incoming>U6</incoming>
+    </endEvent>
+    <sendTask id="U_LoginSubmit" name="Ввести й надіслати логін і пароль" messageRef="M_LoginRequest">
+      <incoming>U7</incoming>
+      <outgoing>U8</outgoing>
+    </sendTask>
+    <receiveTask id="U_LoginReceive" name="Отримати результат входу" messageRef="M_LoginResult">
+      <incoming>U8</incoming>
+      <outgoing>U9</outgoing>
+    </receiveTask>
+    <endEvent id="U_LoginEnd" name="Результат входу показано">
+      <incoming>U9</incoming>
+    </endEvent>
+    <eventBasedGateway id="U_RegWait" name="Очікувати результат реєстрації">
+      <incoming>U2</incoming>
+      <outgoing>U3</outgoing>
+      <outgoing>U4</outgoing>
+    </eventBasedGateway>
+    <intermediateCatchEvent id="U_RegOK" name="Отримано підтвердження">
+      <incoming>U3</incoming>
+      <outgoing>U5</outgoing>
+      <messageEventDefinition id="U_RegOK_definition" messageRef="M_RegOK" />
+    </intermediateCatchEvent>
+    <startEvent id="U_LoginStart" name="Вхід розпочато">
+      <outgoing>U7</outgoing>
+    </startEvent>
+    <sequenceFlow id="U1" sourceRef="U_RegStart" targetRef="U_RegSubmit" />
+    <sequenceFlow id="U2" sourceRef="U_RegSubmit" targetRef="U_RegWait" />
+    <sequenceFlow id="U5" sourceRef="U_RegOK" targetRef="U_RegDone" />
+    <sequenceFlow id="U4" sourceRef="U_RegWait" targetRef="U_RegFail" />
+    <sequenceFlow id="U6" sourceRef="U_RegFail" targetRef="U_RegRejected" />
+    <sequenceFlow id="U7" sourceRef="U_LoginStart" targetRef="U_LoginSubmit" />
+    <sequenceFlow id="U8" sourceRef="U_LoginSubmit" targetRef="U_LoginReceive" />
+    <sequenceFlow id="U9" sourceRef="U_LoginReceive" targetRef="U_LoginEnd" />
+    <sequenceFlow id="U3" sourceRef="U_RegWait" targetRef="U_RegOK" />
+  </process>
+  <process id="Proc_System" isExecutable="false">
+    <laneSet id="LS_System">
+      <lane id="L_System" name="Система">
+        <flowNodeRef>S_RegCheck</flowNodeRef>
+        <flowNodeRef>S_CheckLock</flowNodeRef>
+        <flowNodeRef>S_RegStart</flowNodeRef>
+        <flowNodeRef>S_RegValid</flowNodeRef>
+        <flowNodeRef>S_RegFail</flowNodeRef>
+        <flowNodeRef>S_RegRejected</flowNodeRef>
+        <flowNodeRef>S_Create</flowNodeRef>
+        <flowNodeRef>S_RegOK</flowNodeRef>
+        <flowNodeRef>S_RegDone</flowNodeRef>
+        <flowNodeRef>S_LoginStart</flowNodeRef>
+        <flowNodeRef>S_Locked</flowNodeRef>
+        <flowNodeRef>S_Verify</flowNodeRef>
+        <flowNodeRef>S_SendBlocked</flowNodeRef>
+        <flowNodeRef>S_BlockedEnd</flowNodeRef>
+        <flowNodeRef>S_Valid</flowNodeRef>
+        <flowNodeRef>S_Increment</flowNodeRef>
+        <flowNodeRef>S_Open</flowNodeRef>
+        <flowNodeRef>S_Limit</flowNodeRef>
+        <flowNodeRef>S_SendResult</flowNodeRef>
+        <flowNodeRef>S_Block</flowNodeRef>
+        <flowNodeRef>S_LoginDone</flowNodeRef>
+        <flowNodeRef>S_SendBlock</flowNodeRef>
+        <flowNodeRef>S_Timer</flowNodeRef>
+        <flowNodeRef>S_Unblock</flowNodeRef>
+        <flowNodeRef>S_Unblocked</flowNodeRef>
+      </lane>
+    </laneSet>
+    <task id="S_RegCheck" name="Перевірити унікальність логіна, збіг і складність пароля">
+      <incoming>R1</incoming>
+      <outgoing>R2</outgoing>
+    </task>
+    <task id="S_CheckLock" name="Перевірити стан блокування">
+      <incoming>L1</incoming>
+      <outgoing>L2</outgoing>
+    </task>
+    <startEvent id="S_RegStart" name="Отримано дані реєстрації">
+      <outgoing>R1</outgoing>
+      <messageEventDefinition id="S_RegStart_definition" messageRef="M_RegRequest" />
+    </startEvent>
+    <exclusiveGateway id="S_RegValid" name="Дані валідні й логін вільний?" default="R4">
+      <incoming>R2</incoming>
+      <outgoing>R3</outgoing>
+      <outgoing>R4</outgoing>
+    </exclusiveGateway>
+    <sendTask id="S_RegFail" name="Повідомити про помилку реєстрації" messageRef="M_RegFail">
+      <incoming>R4</incoming>
+      <outgoing>R7</outgoing>
+    </sendTask>
+    <endEvent id="S_RegRejected" name="Реєстрацію відхилено">
+      <incoming>R7</incoming>
+    </endEvent>
+    <task id="S_Create" name="Створити обліковий запис">
+      <incoming>R3</incoming>
+      <outgoing>R5</outgoing>
+    </task>
+    <sendTask id="S_RegOK" name="Повідомити про успішну реєстрацію" messageRef="M_RegOK">
+      <incoming>R5</incoming>
+      <outgoing>R6</outgoing>
+    </sendTask>
+    <endEvent id="S_RegDone" name="Обліковий запис створено">
+      <incoming>R6</incoming>
+    </endEvent>
+    <startEvent id="S_LoginStart" name="Отримано дані входу">
+      <outgoing>L1</outgoing>
+      <messageEventDefinition id="S_LoginStart_definition" messageRef="M_LoginRequest" />
+    </startEvent>
+    <exclusiveGateway id="S_Locked" name="Обліковий запис заблокований?" default="L4">
+      <incoming>L2</incoming>
+      <outgoing>L3</outgoing>
+      <outgoing>L4</outgoing>
+    </exclusiveGateway>
+    <task id="S_Verify" name="Перевірити облікові дані">
+      <incoming>L4</incoming>
+      <outgoing>L5</outgoing>
+    </task>
+    <sendTask id="S_SendBlocked" name="Повідомити про чинне блокування" messageRef="M_LoginResult">
+      <incoming>L3</incoming>
+      <outgoing>L17</outgoing>
+    </sendTask>
+    <endEvent id="S_BlockedEnd" name="Вхід заборонено">
+      <incoming>L17</incoming>
+    </endEvent>
+    <exclusiveGateway id="S_Valid" name="Облікові дані вірні?" default="L7">
+      <incoming>L5</incoming>
+      <outgoing>L6</outgoing>
+      <outgoing>L7</outgoing>
+    </exclusiveGateway>
+    <task id="S_Increment" name="Збільшити лічильник невдалих спроб">
+      <incoming>L7</incoming>
+      <outgoing>L9</outgoing>
+    </task>
+    <task id="S_Open" name="Відкрити сесію і скинути лічильник">
+      <incoming>L6</incoming>
+      <outgoing>L8</outgoing>
+    </task>
+    <exclusiveGateway id="S_Limit" name="Досягнуто трьох невдалих спроб?" default="L11">
+      <incoming>L9</incoming>
+      <outgoing>L10</outgoing>
+      <outgoing>L11</outgoing>
+    </exclusiveGateway>
+    <sendTask id="S_SendResult" name="Повідомити результат входу" messageRef="M_LoginResult">
+      <incoming>L8</incoming>
+      <incoming>L10</incoming>
+      <outgoing>L12</outgoing>
+    </sendTask>
+    <task id="S_Block" name="Заблокувати обліковий запис">
+      <incoming>L11</incoming>
+      <outgoing>L13</outgoing>
+    </task>
+    <endEvent id="S_LoginDone" name="Результат входу надіслано">
+      <incoming>L12</incoming>
+    </endEvent>
+    <sendTask id="S_SendBlock" name="Повідомити про блокування" messageRef="M_LoginResult">
+      <incoming>L13</incoming>
+      <outgoing>L14</outgoing>
+    </sendTask>
+    <intermediateCatchEvent id="S_Timer" name="Минуло 15 хвилин">
+      <incoming>L14</incoming>
+      <outgoing>L15</outgoing>
+      <timerEventDefinition id="S_Timer_timer">
+        <timeDuration xsi:type="tFormalExpression">PT15M</timeDuration>
+      </timerEventDefinition>
+    </intermediateCatchEvent>
+    <task id="S_Unblock" name="Зняти блокування і скинути лічильник">
+      <incoming>L15</incoming>
+      <outgoing>L16</outgoing>
+    </task>
+    <endEvent id="S_Unblocked" name="Блокування знято">
+      <incoming>L16</incoming>
+    </endEvent>
+    <sequenceFlow id="R1" sourceRef="S_RegStart" targetRef="S_RegCheck" />
+    <sequenceFlow id="R2" sourceRef="S_RegCheck" targetRef="S_RegValid" />
+    <sequenceFlow id="L1" sourceRef="S_LoginStart" targetRef="S_CheckLock" />
+    <sequenceFlow id="L2" sourceRef="S_CheckLock" targetRef="S_Locked" />
+    <sequenceFlow id="R3" name="Так" sourceRef="S_RegValid" targetRef="S_Create" />
+    <sequenceFlow id="R4" name="Ні" sourceRef="S_RegValid" targetRef="S_RegFail" />
+    <sequenceFlow id="R7" sourceRef="S_RegFail" targetRef="S_RegRejected" />
+    <sequenceFlow id="R5" sourceRef="S_Create" targetRef="S_RegOK" />
+    <sequenceFlow id="R6" sourceRef="S_RegOK" targetRef="S_RegDone" />
+    <sequenceFlow id="L3" name="Так" sourceRef="S_Locked" targetRef="S_SendBlocked" />
+    <sequenceFlow id="L4" name="Ні" sourceRef="S_Locked" targetRef="S_Verify" />
+    <sequenceFlow id="L5" sourceRef="S_Verify" targetRef="S_Valid" />
+    <sequenceFlow id="L17" sourceRef="S_SendBlocked" targetRef="S_BlockedEnd" />
+    <sequenceFlow id="L6" name="Так" sourceRef="S_Valid" targetRef="S_Open" />
+    <sequenceFlow id="L7" name="Ні" sourceRef="S_Valid" targetRef="S_Increment" />
+    <sequenceFlow id="L9" sourceRef="S_Increment" targetRef="S_Limit" />
+    <sequenceFlow id="L8" sourceRef="S_Open" targetRef="S_SendResult" />
+    <sequenceFlow id="L10" name="Ні" sourceRef="S_Limit" targetRef="S_SendResult" />
+    <sequenceFlow id="L11" name="Так" sourceRef="S_Limit" targetRef="S_Block" />
+    <sequenceFlow id="L12" sourceRef="S_SendResult" targetRef="S_LoginDone" />
+    <sequenceFlow id="L13" sourceRef="S_Block" targetRef="S_SendBlock" />
+    <sequenceFlow id="L14" sourceRef="S_SendBlock" targetRef="S_Timer" />
+    <sequenceFlow id="L15" sourceRef="S_Timer" targetRef="S_Unblock" />
+    <sequenceFlow id="L16" sourceRef="S_Unblock" targetRef="S_Unblocked" />
+  </process>
+  <message id="M_RegRequest" name="Дані реєстрації" />
+  <message id="M_RegOK" name="Реєстрація успішна" />
+  <message id="M_RegFail" name="Реєстрацію відхилено" />
+  <message id="M_LoginRequest" name="Дані входу" />
+  <message id="M_LoginResult" name="Результат входу" />
+  <bpmndi:BPMNDiagram id="Diagram_Compact">
+    <bpmndi:BPMNPlane id="Plane_Compact" bpmnElement="Collaboration_Compact">
+      <bpmndi:BPMNShape id="P_User_di" bpmnElement="P_User" isHorizontal="true">
+        <omgdc:Bounds x="155" y="55" width="2350" height="440" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="U_RegStart_di" bpmnElement="U_RegStart">
+        <omgdc:Bounds x="250" y="155" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="239" y="191" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="U_RegSubmit_di" bpmnElement="U_RegSubmit">
+        <omgdc:Bounds x="350" y="135" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="U_RegDone_di" bpmnElement="U_RegDone">
+        <omgdc:Bounds x="790" y="95" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="779" y="131" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="U_RegFail_di" bpmnElement="U_RegFail">
+        <omgdc:Bounds x="670" y="230" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="662" y="192.5" width="52" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="U_RegRejected_di" bpmnElement="U_RegRejected">
+        <omgdc:Bounds x="790" y="230" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="779" y="266" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="U_LoginSubmit_di" bpmnElement="U_LoginSubmit">
+        <omgdc:Bounds x="1090" y="325" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="U_LoginReceive_di" bpmnElement="U_LoginReceive">
+        <omgdc:Bounds x="1610" y="325" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="U_LoginEnd_di" bpmnElement="U_LoginEnd">
+        <omgdc:Bounds x="1770" y="345" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1747" y="381" width="83" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="U_RegWait_di" bpmnElement="U_RegWait">
+        <omgdc:Bounds x="535" y="150" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="594.5" y="155" width="53" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="U_RegOK_di" bpmnElement="U_RegOK">
+        <omgdc:Bounds x="712" y="95" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="685" y="66" width="76" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="U_LoginStart_di" bpmnElement="U_LoginStart">
+        <omgdc:Bounds x="980" y="349" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="960" y="385" width="77" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="U1_di" bpmnElement="U1">
+        <omgdi:waypoint x="286" y="173" />
+        <omgdi:waypoint x="350" y="175" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="U2_di" bpmnElement="U2">
+        <omgdi:waypoint x="480" y="175" />
+        <omgdi:waypoint x="535" y="175" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="U3_di" bpmnElement="U3">
+        <omgdi:waypoint x="560" y="150" />
+        <omgdi:waypoint x="560" y="102" />
+        <omgdi:waypoint x="716" y="102" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="U4_di" bpmnElement="U4">
+        <omgdi:waypoint x="560" y="200" />
+        <omgdi:waypoint x="560" y="261" />
+        <omgdi:waypoint x="676" y="261" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="U5_di" bpmnElement="U5">
+        <omgdi:waypoint x="748" y="113" />
+        <omgdi:waypoint x="790" y="113" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="U6_di" bpmnElement="U6">
+        <omgdi:waypoint x="706" y="248" />
+        <omgdi:waypoint x="790" y="248" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="U7_di" bpmnElement="U7">
+        <omgdi:waypoint x="1016" y="367" />
+        <omgdi:waypoint x="1090" y="367" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="U8_di" bpmnElement="U8">
+        <omgdi:waypoint x="1220" y="365" />
+        <omgdi:waypoint x="1610" y="365" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="U9_di" bpmnElement="U9">
+        <omgdi:waypoint x="1740" y="365" />
+        <omgdi:waypoint x="1770" y="363" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="P_System_di" bpmnElement="P_System" isHorizontal="true">
+        <omgdc:Bounds x="155" y="555" width="2350" height="740" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="L_System_di" bpmnElement="L_System" isHorizontal="true">
+        <omgdc:Bounds x="185" y="555" width="2320" height="740" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_RegCheck_di" bpmnElement="S_RegCheck">
+        <omgdc:Bounds x="350" y="643" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_CheckLock_di" bpmnElement="S_CheckLock">
+        <omgdc:Bounds x="1080" y="958" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_RegStart_di" bpmnElement="S_RegStart">
+        <omgdc:Bounds x="272" y="665" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="252" y="701" width="76" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_RegValid_di" bpmnElement="S_RegValid" isMarkerVisible="true">
+        <omgdc:Bounds x="535" y="658" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="503" y="708" width="57" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_RegFail_di" bpmnElement="S_RegFail">
+        <omgdc:Bounds x="623" y="590" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_RegRejected_di" bpmnElement="S_RegRejected">
+        <omgdc:Bounds x="810" y="612" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="799" y="648" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_Create_di" bpmnElement="S_Create">
+        <omgdc:Bounds x="623" y="730" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_RegOK_di" bpmnElement="S_RegOK">
+        <omgdc:Bounds x="795" y="730" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_RegDone_di" bpmnElement="S_RegDone">
+        <omgdc:Bounds x="962" y="752" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="938" y="788" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_LoginStart_di" bpmnElement="S_LoginStart">
+        <omgdc:Bounds x="1127" y="862" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1107" y="824.5" width="76" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_Locked_di" bpmnElement="S_Locked" isMarkerVisible="true">
+        <omgdc:Bounds x="1245" y="973" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1217" y="870.5" width="63" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_Verify_di" bpmnElement="S_Verify">
+        <omgdc:Bounds x="1315" y="1090" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_SendBlocked_di" bpmnElement="S_SendBlocked">
+        <omgdc:Bounds x="1305" y="900" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_BlockedEnd_di" bpmnElement="S_BlockedEnd">
+        <omgdc:Bounds x="1472" y="922" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1448" y="958" width="85" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_Valid_di" bpmnElement="S_Valid" isMarkerVisible="true">
+        <omgdc:Bounds x="1495" y="1105" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1466" y="1079.5" width="67" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_Increment_di" bpmnElement="S_Increment">
+        <omgdc:Bounds x="1595" y="1090" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_Open_di" bpmnElement="S_Open">
+        <omgdc:Bounds x="1565" y="920" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_Limit_di" bpmnElement="S_Limit" isMarkerVisible="true">
+        <omgdc:Bounds x="1748" y="1105" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1729" y="1165" width="88" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_SendResult_di" bpmnElement="S_SendResult">
+        <omgdc:Bounds x="1850" y="920" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_Block_di" bpmnElement="S_Block">
+        <omgdc:Bounds x="1850" y="1090" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_LoginDone_di" bpmnElement="S_LoginDone">
+        <omgdc:Bounds x="2022" y="942" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1999" y="978" width="83" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_SendBlock_di" bpmnElement="S_SendBlock">
+        <omgdc:Bounds x="2010" y="1090" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_Timer_di" bpmnElement="S_Timer">
+        <omgdc:Bounds x="2160" y="1112" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="2151" y="1148" width="55" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_Unblock_di" bpmnElement="S_Unblock">
+        <omgdc:Bounds x="2230" y="1090" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S_Unblocked_di" bpmnElement="S_Unblocked">
+        <omgdc:Bounds x="2390" y="1112" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="2378" y="1148" width="61" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="R1_di" bpmnElement="R1">
+        <omgdi:waypoint x="308" y="683" />
+        <omgdi:waypoint x="350" y="683" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="R2_di" bpmnElement="R2">
+        <omgdi:waypoint x="480" y="683" />
+        <omgdi:waypoint x="535" y="683" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="R3_di" bpmnElement="R3">
+        <omgdi:waypoint x="560" y="708" />
+        <omgdi:waypoint x="560" y="744" />
+        <omgdi:waypoint x="623" y="744" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="565" y="728" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="R4_di" bpmnElement="R4">
+        <omgdi:waypoint x="585" y="683" />
+        <omgdi:waypoint x="585" y="630" />
+        <omgdi:waypoint x="623" y="630" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="568" y="656" width="11" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="R5_di" bpmnElement="R5">
+        <omgdi:waypoint x="753" y="770" />
+        <omgdi:waypoint x="795" y="770" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="R6_di" bpmnElement="R6">
+        <omgdi:waypoint x="925" y="770" />
+        <omgdi:waypoint x="962" y="770" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="R7_di" bpmnElement="R7">
+        <omgdi:waypoint x="753" y="630" />
+        <omgdi:waypoint x="810" y="630" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L1_di" bpmnElement="L1">
+        <omgdi:waypoint x="1145" y="898" />
+        <omgdi:waypoint x="1145" y="958" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L2_di" bpmnElement="L2">
+        <omgdi:waypoint x="1210" y="998" />
+        <omgdi:waypoint x="1245" y="998" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L3_di" bpmnElement="L3">
+        <omgdi:waypoint x="1270" y="973" />
+        <omgdi:waypoint x="1270" y="900" />
+        <omgdi:waypoint x="1315" y="900" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1246" y="933" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L4_di" bpmnElement="L4">
+        <omgdi:waypoint x="1270" y="1023" />
+        <omgdi:waypoint x="1270" y="1130" />
+        <omgdi:waypoint x="1315" y="1130" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1274" y="1085" width="11" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L5_di" bpmnElement="L5">
+        <omgdi:waypoint x="1445" y="1130" />
+        <omgdi:waypoint x="1495" y="1130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L6_di" bpmnElement="L6">
+        <omgdi:waypoint x="1545" y="1130" />
+        <omgdi:waypoint x="1545" y="960" />
+        <omgdi:waypoint x="1565" y="960" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1524" y="1008" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L7_di" bpmnElement="L7">
+        <omgdi:waypoint x="1545" y="1130" />
+        <omgdi:waypoint x="1595" y="1130" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1557" y="1113" width="11" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L8_di" bpmnElement="L8">
+        <omgdi:waypoint x="1695" y="960" />
+        <omgdi:waypoint x="1850" y="960" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L9_di" bpmnElement="L9">
+        <omgdi:waypoint x="1725" y="1130" />
+        <omgdi:waypoint x="1748" y="1130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L10_di" bpmnElement="L10">
+        <omgdi:waypoint x="1773" y="1105" />
+        <omgdi:waypoint x="1773" y="1000" />
+        <omgdi:waypoint x="1860" y="1000" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1751" y="1040" width="11" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L11_di" bpmnElement="L11">
+        <omgdi:waypoint x="1798" y="1130" />
+        <omgdi:waypoint x="1850" y="1130" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1809" y="1113" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L12_di" bpmnElement="L12">
+        <omgdi:waypoint x="1980" y="960" />
+        <omgdi:waypoint x="2022" y="960" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L13_di" bpmnElement="L13">
+        <omgdi:waypoint x="1980" y="1130" />
+        <omgdi:waypoint x="2010" y="1130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L14_di" bpmnElement="L14">
+        <omgdi:waypoint x="2140" y="1130" />
+        <omgdi:waypoint x="2160" y="1130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L15_di" bpmnElement="L15">
+        <omgdi:waypoint x="2196" y="1130" />
+        <omgdi:waypoint x="2230" y="1130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L16_di" bpmnElement="L16">
+        <omgdi:waypoint x="2360" y="1130" />
+        <omgdi:waypoint x="2390" y="1130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="L17_di" bpmnElement="L17">
+        <omgdi:waypoint x="1435" y="940" />
+        <omgdi:waypoint x="1472" y="940" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Assoc_Rules_di" bpmnElement="Assoc_Rules">
+        <omgdi:waypoint x="1764" y="1146" />
+        <omgdi:waypoint x="1764" y="1200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M1_di" bpmnElement="M1">
+        <omgdi:waypoint x="370" y="220" />
+        <omgdi:waypoint x="370" y="440" />
+        <omgdi:waypoint x="284" y="440" />
+        <omgdi:waypoint x="284" y="666" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M2_di" bpmnElement="M2">
+        <omgdi:waypoint x="875" y="730" />
+        <omgdi:waypoint x="875" y="466" />
+        <omgdi:waypoint x="723" y="466" />
+        <omgdi:waypoint x="723" y="129" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M3_di" bpmnElement="M3">
+        <omgdi:waypoint x="687" y="590" />
+        <omgdi:waypoint x="687" y="266" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M4_di" bpmnElement="M4">
+        <omgdi:waypoint x="1140" y="405" />
+        <omgdi:waypoint x="1140" y="863" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M5_di" bpmnElement="M5">
+        <omgdi:waypoint x="1938" y="920" />
+        <omgdi:waypoint x="1938" y="635" />
+        <omgdi:waypoint x="1652" y="635" />
+        <omgdi:waypoint x="1652" y="405" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M6_di" bpmnElement="M6">
+        <omgdi:waypoint x="2099" y="1090" />
+        <omgdi:waypoint x="2099" y="743" />
+        <omgdi:waypoint x="1730" y="743" />
+        <omgdi:waypoint x="1730" y="405" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M7_di" bpmnElement="M7">
+        <omgdi:waypoint x="1395" y="900" />
+        <omgdi:waypoint x="1395" y="758" />
+        <omgdi:waypoint x="1691" y="758" />
+        <omgdi:waypoint x="1691" y="405" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Note_Rules_di" bpmnElement="Note_Rules">
+        <omgdc:Bounds x="1517" y="1200" width="470" height="65" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
