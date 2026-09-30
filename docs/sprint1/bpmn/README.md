@@ -22,9 +22,9 @@
 
 1. **`01_autorateregistrationlogincompact`** — Модель процесу «Реєстрація і вхід»
    * [Діаграма (.bpmn)](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/01_autorateregistrationlogincompact.bpmn) | ![Перегляд .svg](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/01_autorateregistrationlogincompact.svg)
-2. **`02_votingforthemodel`** — Модель процесу «Пошук та перегляд каталогу»
+2. **`02_votingforthemodel`** — Модель процесу «Голосування за модель»
    * [Діаграма (.bpmn)](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/02_votingforthemodel.bpmn) | ![Перегляд .svg](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/02_votingforthemodel.svg)
-3. **`03_autoratemoderationcorrected`** — Модель процесу «Голосування та коментування»
+3. **`03_autoratemoderationcorrected`** — Модель процесу «Модерація коментарів»
    * [Діаграма (.bpmn)](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/03_autoratemoderationcorrected.bpmn) | ![Перегляд  .svg](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/03_autoratemoderationcorrected.svg)
 4. **`04_addinganewmodeltothecatalog`** — Модель процесу «Додавання нової моделі в каталог»
    * [Діаграма (.bpmn)](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/04_addinganewmodeltothecatalog.bpmn) | ![Перегляд .svg](https://github.com/artemfb42/autorateFB42/blob/main/docs/sprint1/bpmn/04_addinganewmodeltothecatalog.svg)
