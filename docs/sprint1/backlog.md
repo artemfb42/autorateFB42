@@ -16,4 +16,5 @@ Backlog містить user stories для функціональності «О
 **Medium** — функціональність важлива для повноцінної роботи користувачів і модераторів, але не є критичною для базового сценарію.  
 **Low** — функціональність корисна для підтримки продукту, але може бути реалізована після основних сценаріїв.  
 
-Посилання на аркуш Очікування Stories https://docs.google.com/spreadsheets/d/1m1SFjYJIodqCs-J5U-ZLPSjR6GYzI4lvot8bQLAqiZk/edit?usp=sharing
+Посилання на аркуш Очікування Stories 
+https://docs.google.com/spreadsheets/d/133LxOugjHWKd4t9DTW4bXEoCC5zulD00qn4mE55bJ24/edit?hl=uk&gid=0#gid=0
