@@ -85,7 +85,7 @@ class RatingAggregatorTest {
         assertEquals(expected, aggregator.average(votes(spec)), DELTA);
     }
 
-    // BUG-014 (GitHub Issue: вписати номер після створення): v1 відкидає другий знак замість HALF_UP.
+    // BUG-014 (GitHub Issue: 14): v1 відкидає другий знак замість HALF_UP.
     @ParameterizedTest(name = "BL-10: голоси [{0}] → {1} (HALF_UP: друга цифра ≥ 5 округлюється вгору)")
     @CsvSource({
             "5:1; 5:1; 4:1,      4.7",
@@ -153,7 +153,7 @@ class RatingAggregatorTest {
         assertIterableEquals(List.of("audi R8", "BMW M1", "BMW M3", "Ferrari F40"), fullNames(top));
     }
 
-    // BUG-015 (GitHub Issue: вписати номер після створення): v1 вимагає > 3 голосів замість ≥ 3.
+    // BUG-015 (GitHub Issue: №17): v1 вимагає > 3 голосів замість ≥ 3.
     @ParameterizedTest(name = "BL-20: модель із {0} голосами потрапляє у список: {1}")
     @CsvSource({
             "0, false",
