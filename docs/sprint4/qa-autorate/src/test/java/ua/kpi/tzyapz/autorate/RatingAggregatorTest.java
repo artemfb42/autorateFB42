@@ -85,7 +85,7 @@ class RatingAggregatorTest {
         assertEquals(expected, aggregator.average(votes(spec)), DELTA);
     }
 
-    // BUG-014 (GitHub Issue: 14): v1 відкидає другий знак замість HALF_UP.
+    // BUG-014 (GitHub Issue: 15): v1 відкидає другий знак замість HALF_UP.
     @ParameterizedTest(name = "BL-10: голоси [{0}] → {1} (HALF_UP: друга цифра ≥ 5 округлюється вгору)")
     @CsvSource({
             "5:1; 5:1; 4:1,      4.7",
