@@ -10,12 +10,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Юніт-тести класу RatingAggregator (SRS 1.1, розділ 5).
- * BL-10 average — автор Собко Артем (КТ).
+ * BL-10 average — автор Собко Артем (КТ); BL-20 topN — автор Бурмай Юлія (ТА).
  * Очікувані значення обчислено вручну за текстом вимог.
  */
 @Tag("unit")
@@ -115,5 +116,108 @@ class RatingAggregatorTest {
     @DisplayName("BL-10 / розд. 5: null замість колекції голосів → IllegalArgumentException")
     void nullVotesThrow() {
         assertThrows(IllegalArgumentException.class, () -> aggregator.average(null));
+    }
+
+    // ===================== BL-20: topN — автор Бурмай Юлія =====================
+
+    private static List<String> fullNames(List<CarModel> models) {
+        return models.stream().map(CarModel::fullName).collect(Collectors.toList());
+    }
+
+    @Test
+    @DisplayName("BL-20: моделі впорядковано за рейтингом за спаданням")
+    void ordersByRatingDescending() {
+        // arrange
+        List<CarModel> models = List.of(
+                new CarModel("Ferrari", "F40", 4.2, 10),
+                new CarModel("Lamborghini", "Diablo", 4.9, 12),
+                new CarModel("Ford", "Mustang", 3.5, 15));
+        // act
+        List<CarModel> top = aggregator.topN(models, 3);
+        // assert
+        assertIterableEquals(List.of("Lamborghini Diablo", "Ferrari F40", "Ford Mustang"), fullNames(top));
+    }
+
+    @Test
+    @DisplayName("BL-20: рівні рейтинги — за повною назвою (марка + модель) за алфавітом без урахування регістру")
+    void tiesAreOrderedByFullNameIgnoringCase() {
+        // «audi R8» з малої літери: з урахуванням регістру вона опинилася б після «BMW M3»
+        List<CarModel> models = List.of(
+                new CarModel("Ferrari", "F40", 4.5, 10),
+                new CarModel("BMW", "M3", 4.5, 10),
+                new CarModel("audi", "R8", 4.5, 10),
+                new CarModel("BMW", "M1", 4.5, 10));
+
+        List<CarModel> top = aggregator.topN(models, 4);
+
+        assertIterableEquals(List.of("audi R8", "BMW M1", "BMW M3", "Ferrari F40"), fullNames(top));
+    }
+
+    // BUG-015 (GitHub Issue: вписати номер після створення): v1 вимагає > 3 голосів замість ≥ 3.
+    @ParameterizedTest(name = "BL-20: модель із {0} голосами потрапляє у список: {1}")
+    @CsvSource({
+            "0, false",
+            "2, false",
+            "3, true",
+            "4, true"
+    })
+    void modelNeedsAtLeastThreeVotes(int votes, boolean expectedInList) {
+        List<CarModel> models = List.of(new CarModel("Ferrari", "F40", 4.2, votes));
+
+        List<CarModel> top = aggregator.topN(models, 5);
+
+        assertEquals(expectedInList, !top.isEmpty(),
+                "Поріг BL-20: модель потрапляє у список лише з ≥3 голосами; голосів: " + votes);
+    }
+
+    @Test
+    @DisplayName("BL-20: повертається не більше ніж n моделей — найкращі за рейтингом")
+    void returnsAtMostNModels() {
+        List<CarModel> models = List.of(
+                new CarModel("Ferrari", "F40", 4.2, 10),
+                new CarModel("Lamborghini", "Diablo", 4.9, 12),
+                new CarModel("Ford", "Mustang", 3.5, 15),
+                new CarModel("Audi", "R8", 4.6, 20));
+
+        List<CarModel> top = aggregator.topN(models, 2);
+
+        assertIterableEquals(List.of("Lamborghini Diablo", "Audi R8"), fullNames(top));
+    }
+
+    @Test
+    @DisplayName("BL-20: n більше за кількість моделей — повертаються всі моделі, що пройшли поріг")
+    void nGreaterThanCatalogReturnsAllEligible() {
+        List<CarModel> models = List.of(
+                new CarModel("Ferrari", "F40", 4.2, 10),
+                new CarModel("Ford", "Mustang", 3.5, 1));
+
+        List<CarModel> top = aggregator.topN(models, 100);
+
+        assertIterableEquals(List.of("Ferrari F40"), fullNames(top));
+    }
+
+    @ParameterizedTest(name = "BL-20: n = {0} (≤ 0) → порожній список")
+    @ValueSource(ints = {0, -1, -100})
+    void nonPositiveNGivesEmptyList(int n) {
+        List<CarModel> models = List.of(new CarModel("Ferrari", "F40", 4.2, 10));
+        assertTrue(aggregator.topN(models, n).isEmpty());
+    }
+
+    @Test
+    @DisplayName("BL-20: n = 1 (межа) → рівно одна найкраща модель")
+    void nEqualToOneReturnsSingleBestModel() {
+        List<CarModel> models = List.of(
+                new CarModel("Ferrari", "F40", 4.2, 10),
+                new CarModel("Lamborghini", "Diablo", 4.9, 12));
+
+        List<CarModel> top = aggregator.topN(models, 1);
+
+        assertIterableEquals(List.of("Lamborghini Diablo"), fullNames(top));
+    }
+
+    @Test
+    @DisplayName("BL-20 / розд. 5: null замість колекції моделей → IllegalArgumentException")
+    void nullModelsThrow() {
+        assertThrows(IllegalArgumentException.class, () -> aggregator.topN(null, 3));
     }
 }
