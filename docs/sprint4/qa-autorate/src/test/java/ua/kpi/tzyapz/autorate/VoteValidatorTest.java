@@ -57,7 +57,7 @@ class VoteValidatorTest {
                 () -> assertFalse(validator.isValid("u1", "m1", 4, COMMENT, existing)));
     }
 
-    // BUG-016 (GitHub Issue: вписати номер після створення): v1 порівнює лише userId, без modelId.
+    // BUG-016 (GitHub Issue: 22): v1 порівнює лише userId, без modelId.
     @Test
     @DisplayName("BL-30: той самий користувач, інша модель → голос приймається")
     void sameUserOtherModelIsAccepted() {
@@ -79,7 +79,7 @@ class VoteValidatorTest {
         assertFalse(errors.contains(DUPLICATE), "Порушення: " + errors);
     }
 
-    // BUG-017 (GitHub Issue: вписати номер після створення): v1 відхиляє оцінку 5 (верхня межа).
+    // BUG-017 (GitHub Issue: 21): v1 відхиляє оцінку 5 (верхня межа).
     @ParameterizedTest(name = "BL-40: оцінка {0} у межах 1..5 приймається")
     @ValueSource(ints = {1, 2, 3, 4, 5})
     void ratingWithinRangeIsAccepted(int rating) {
