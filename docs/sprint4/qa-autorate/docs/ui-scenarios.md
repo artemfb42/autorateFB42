@@ -4,7 +4,7 @@
 Відбір сценаріїв і локатори: Бурмай Юлія (ТА).    
 Реалізація: Деркач Юрій (ІТ).     
 Demo: https://buggy.justtestit.org.     
-Тест-кейси — [test-cases.xlsx](sprint3/test-cases.xlsx), журнал — [execution-log.xlsx](sprint3/execution-log.xlsx).
+Тест-кейси — [test-cases.xlsx](../../../sprint3/test-cases.xlsx), журнал — [execution-log.xlsx](../../../sprint3/execution-log.xlsx).
 
 ## 1. Як відібрано сценарії
 
@@ -47,10 +47,10 @@ Demo: https://buggy.justtestit.org.
 | Поле пароля (верхня панель) | `By.name("password")` | `TopBar.PASSWORD_INPUT` | DOM |
 | Кнопка Login | `my-login button[type='submit']` | `TopBar.LOGIN_BUTTON` | DOM |
 | Кнопка Register (панель) | `my-login a[href='/register']` | `TopBar.REGISTER_LINK` | DOM |
-| Повідомлення про невдалий вхід | `my-login .label-warning` | `TopBar.ERROR_LABEL` | ⚠ |
-| Привітання «Hi, …» | `my-login span.nav-link` | `TopBar.GREETING` | ⚠ |
-| Посилання Profile | `my-login a[href='/profile']` | `TopBar.PROFILE_LINK` | ⚠ |
-| Кнопка Logout | `By.linkText("Logout")` | `TopBar.LOGOUT_LINK` | ⚠ |
+| Повідомлення про невдалий вхід | `my-login .label-warning` | `TopBar.ERROR_LABEL` | DOM |
+| Привітання «Hi, …» | `my-login span.nav-link` | `TopBar.GREETING` | DOM |
+| Посилання Profile | `my-login a[href='/profile']` | `TopBar.PROFILE_LINK` | DOM |
+| Кнопка Logout | `By.linkText("Logout")` | `TopBar.LOGOUT_LINK` | DOM |
 | Поля реєстрації | `By.id("username")`, `firstName`, `lastName`, `password`, `confirmPassword` | `RegisterPage` | DOM |
 | Кнопка Register (форма) | `my-register button[type='submit']` | `RegisterPage.REGISTER_BUTTON` | DOM |
 | Посилання Cancel | `my-register a[role='button']` | `RegisterPage.CANCEL_LINK` | DOM |
@@ -64,8 +64,8 @@ Demo: https://buggy.justtestit.org.
 | Пагінація | `my-pager` | `CatalogUiTest.PAGER` | DOM |
 | Заголовок Specification | `//my-model//h4[normalize-space()='Specification']` | `CatalogUiTest` | DOM |
 | Текст для відвідувача у блоці Votes | `my-model p.card-text` | `CatalogUiTest`, `LoginUiTest` | DOM |
-| Поле Comment | `By.id("comment")` (перевіряється відсутність) | `CatalogUiTest`, `LoginUiTest` | ⚠ |
-| Кнопка Vote! | `//my-model//button[normalize-space()='Vote!']` (перевіряється відсутність) | `CatalogUiTest` | ⚠ |
+| Поле Comment | `By.id("comment")` (перевіряється відсутність) | `CatalogUiTest`, `LoginUiTest` | DOM |
+| Кнопка Vote! | `//my-model//button[normalize-space()='Vote!']` (перевіряється відсутність) | `CatalogUiTest` | DOM |
 
 Для елементів «перевіряється відсутність» помилковий локатор дав би хибно-зелений результат, тому ІТ один раз
 увійти вручну, відкрити сторінку моделі, за яку ще не голосували, і переконатися, що обидва локатори знаходять елемент.
