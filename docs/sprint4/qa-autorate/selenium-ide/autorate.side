@@ -1,0 +1,202 @@
+{
+  "id": "2e66492a-0f96-4b34-abb8-03aad495d30d",
+  "version": "2.0",
+  "name": "autorate",
+  "url": "https://buggy.justtestit.org",
+  "tests": [{
+    "id": "4a7a6492-a618-470e-9d34-d0eb8c408cba",
+    "name": "TC-005 Розбіжність Password і Confirm Password блокує реєстрацію",
+    "commands": [{
+      "id": "1b268065-3309-424f-bf77-15c0ad2cf571",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a4793b66-2ff8-4a37-b0f0-c30cf4d533af",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1280x900",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "82d52a8c-efd7-4540-bb71-6d71453cd813",
+      "comment": "",
+      "command": "click",
+      "target": "css=my-login a[href='/register']",
+      "targets": [
+        ["linkText=Register", "linkText"],
+        ["css=.btn-success-outline", "css:finder"],
+        ["xpath=//a[contains(text(),'Register')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/register')]", "xpath:href"],
+        ["xpath=//form/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Register')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "bb3d9532-2333-4bab-bc8b-1cf2169622cd",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "id=username",
+      "targets": [],
+      "value": "10000"
+    }, {
+      "id": "aa145479-4e90-41db-8213-9ced6728697d",
+      "comment": "",
+      "command": "type",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["name=username", "name"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//div/div/form/div/input", "xpath:position"]
+      ],
+      "value": "fb42_tc005"
+    }, {
+      "id": "0198b6af-bf94-4090-913f-b7ca558dab42",
+      "comment": "",
+      "command": "type",
+      "target": "id=firstName",
+      "targets": [
+        ["id=firstName", "id"],
+        ["name=firstName", "name"],
+        ["css=#firstName", "css:finder"],
+        ["xpath=//input[@id='firstName']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "Test"
+    }, {
+      "id": "04ca80b6-f2c8-4e90-a985-75a6f9a960f6",
+      "comment": "",
+      "command": "type",
+      "target": "id=lastName",
+      "targets": [
+        ["id=lastName", "id"],
+        ["name=lastName", "name"],
+        ["css=#lastName", "css:finder"],
+        ["xpath=//input[@id='lastName']", "xpath:attributes"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": "Tester"
+    }, {
+      "id": "2fe03853-9bce-4a23-af36-1ba26a9e5ca0",
+      "comment": "",
+      "command": "type",
+      "target": "id=password",
+      "targets": [
+        ["id=password", "id"],
+        ["css=#password", "css:finder"],
+        ["xpath=//input[@id='password']", "xpath:attributes"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": "Pass1234a@"
+    }, {
+      "id": "3316ade6-59fc-4eda-9f34-02332b8fd0f6",
+      "comment": "",
+      "command": "type",
+      "target": "id=confirmPassword",
+      "targets": [],
+      "value": "Pass1235a@"
+    }, {
+      "id": "c9aae2b9-84a9-4444-96cb-06424de67514",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "css=#confirmPassword + div.alert-danger",
+      "targets": [],
+      "value": "10000"
+    }, {
+      "id": "b39e303f-c6ff-43e0-9868-697ab65f44f2",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=#confirmPassword + div.alert-danger",
+      "targets": [],
+      "value": "Passwords do not match"
+    }, {
+      "id": "525e70c2-aa8d-42c1-9bd6-1e14b2327aa6",
+      "comment": "",
+      "command": "verifyNotEditable",
+      "target": "css=my-register button[type='submit']",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2342c87d-9c3d-4936-a196-a22a24eab3f7",
+      "comment": "",
+      "command": "",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "ab235e7f-f5cf-4497-94b3-00e7a656faa3",
+    "name": "TC-027 Відвідувач не бачить форми голосування",
+    "commands": [{
+      "id": "9b5d5e06-6f94-4608-a3b9-fba58435eddc",
+      "comment": "Крок 1: головна сторінка (без входу)",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "76af7579-f306-4d5d-b70e-e25435f214da",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1280x900",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "53a27584-c853-4673-8d5f-9874f4a08272",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "css=my-home a[href^='/model/']",
+      "targets": [],
+      "value": "10000"
+    }, {
+      "id": "6f20f718-9221-445a-a2f9-8045b5b09dad",
+      "comment": "Крок 2: зображення блоку Popular Model",
+      "command": "click",
+      "target": "css=my-home a[href^='/model/']",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "68a07d59-1679-4513-907a-1744d4fb3e34",
+      "comment": "Крок 3: блок Votes домальовано",
+      "command": "waitForElementVisible",
+      "target": "css=my-model p.card-text",
+      "targets": [],
+      "value": "10000"
+    }, {
+      "id": "165260ce-0dee-45ef-9462-1bbdb292f9c7",
+      "comment": "Жорстка перевірка тексту для відвідувача",
+      "command": "assertText",
+      "target": "css=my-model p.card-text",
+      "targets": [],
+      "value": "You need to be logged in to vote."
+    }, {
+      "id": "9d28026a-6ce5-409d-83bc-5d9db8ce1c56",
+      "comment": "М'яка перевірка: поля Comment немає",
+      "command": "verifyElementNotPresent",
+      "target": "id=comment",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1fa209e5-f4e2-49be-bbc3-1bd89b813bb2",
+      "comment": "М'яка перевірка: кнопки Vote! немає",
+      "command": "verifyElementNotPresent",
+      "target": "xpath=//my-model//button[normalize-space()='Vote!']",
+      "targets": [],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "4b500447-89ca-4096-b29d-35446c4b7a35",
+    "name": "Sprint 4 — АвтоРейт",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["4a7a6492-a618-470e-9d34-d0eb8c408cba", "ab235e7f-f5cf-4497-94b3-00e7a656faa3"]
+  }],
+  "urls": ["https://buggy.justtestit.org/"],
+  "plugins": []
+}
