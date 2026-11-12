@@ -1,7 +1,10 @@
 # UI-сценарії для автоматизації: TC → кроки, локатори, очікування, тест-метод
 
-**Спринт 4, команда $Win (ФБ-42).** Відбір сценаріїв і локатори: Бурмай Юлія (ТА). Реалізація: Деркач Юрій (ІТ).
-Demo: https://buggy.justtestit.org. Тест-кейси — [test-cases.xlsx](sprint3/test-cases.xlsx), журнал — [execution-log.xlsx](sprint3/execution-log.xlsx).
+**Спринт 4, команда $Win (ФБ-42).**    
+Відбір сценаріїв і локатори: Бурмай Юлія (ТА).    
+Реалізація: Деркач Юрій (ІТ).     
+Demo: https://buggy.justtestit.org.     
+Тест-кейси — [test-cases.xlsx](sprint3/test-cases.xlsx), журнал — [execution-log.xlsx](sprint3/execution-log.xlsx).
 
 ## 1. Як відібрано сценарії
 
@@ -166,15 +169,37 @@ Demo: https://buggy.justtestit.org. Тест-кейси — [test-cases.xlsx](sp
 
 Проєкт `selenium-ide/autorate.side` (базовий URL `https://buggy.justtestit.org`), записує і відтворює ІТ.
 
-| Тест у проєкті | Тест-кейс | WebDriver-аналог |
-|---|---|---|
-| TC-005 Розбіжність Password і Confirm Password блокує реєстрацію | TC-005 | `RegistrationUiTest.passwordMismatchShowsErrorAndKeepsRegisterDisabled` |
-| TC-027 Відвідувач не бачить форми голосування | TC-027 | `CatalogUiTest.visitorSeesLoginHintInsteadOfVoteForm` |
+| Тест у проєкті | Тест-кейс | Команд | Експорт Java JUnit | WebDriver-аналог |
+|---|---|---:|---|---|
+| TC-005 Розбіжність Password і Confirm Password блокує реєстрацію | TC-005 | 12 | `selenium-ide/export/TC005PasswordConfirmPasswordTest.java` | `RegistrationUiTest.passwordMismatchShowsErrorAndKeepsRegisterDisabled` |
+| TC-027 Відвідувач не бачить форми голосування | TC-027 | 8 | `selenium-ide/export/TC027Test.java` | `CatalogUiTest.visitorSeesLoginHintInsteadOfVoteForm` |
 
-Обидва сценарії не потребують входу і не змінюють дані demo. Команди: дії `open`, `click`, `type`; очікування
-`wait for element visible`; жорстка перевірка `assert text`; м'які `verify not editable`, `verify element not present`.
+Обидва сценарії не потребують входу і не змінюють дані demo. Команди: дії `open`, `set window size`, `click`, `type`;
+очікування `wait for element visible`; жорстка перевірка `assert text`; м'які `verify not editable`, `verify element not present`.
 Експорт `Export → Java JUnit` — у `selenium-ide/export/` (чернетки у стилі JUnit 4, поза `src/`, не збираються).
 
-| Дата запису | Версія Selenium IDE | Версія Chrome | Результат трьох відтворень |
+| Дата запису і відтворення | Версія Selenium IDE | Браузер | Результат трьох відтворень |
 |---|---|---|---|
-| | | | |
+| 12.11.2026 | 3.17.0 (розширення для Chrome) | Google Chrome 157 (стабільний канал, остання версія на дату запуску) | 3 × 2 passed (TC-005, TC-027) — `Runs: 2, Failures: 0` |
+
+### Як записано TC-005
+
+1. Сценарій записано кнопкою **REC**: Register у верхній панелі → заповнення п'яти полів форми (кнопку Register не натискали).
+2. Після запису прибрано зайві команди: `close` (закриття вкладок під час запису), `click` перед кожним `type`, клік по формі
+   `css=form:nth-child(2)` і дубль `click linkText=Register`.
+3. Локатор кнопки Register `linkText=Register` замінено на стійкий `css=my-login a[href='/register']`
+   (той самий, що в Page Object `TopBar.REGISTER_LINK`).
+4. Додано `open /` і `set window size 1280x900` на початок, `wait for element visible id=username` після переходу на форму
+   (SPA домальовує форму після кліку) і три перевірки в кінці: очікування повідомлення, `assert text`, `verify not editable`.
+
+### TC-027
+
+Складено вручну з кроків тест-кейсу; головна сторінка і сторінка моделі домальовуються після завантаження, тому перед кліком
+і перед перевіркою стоїть `wait for element visible`.
+
+### Обмеження середовища
+
+Перший запуск 12.11.2026 у **Mozilla Firefox** завершився помилками: команда `type` падала з повідомленням
+`n.createEvent(...).initKeyEvent is not a function`. Причина — Firefox 147+ прибрав застарілий API `initKeyEvent`, яким
+розширення Selenium IDE імітує введення з клавіатури (SeleniumHQ/selenium#16915). Сценарій при цьому коректний:
+у Google Chrome обидва тести проходять. Тому запис і відтворення виконано в Chrome; WebDriver-тести також працюють через Chrome.
