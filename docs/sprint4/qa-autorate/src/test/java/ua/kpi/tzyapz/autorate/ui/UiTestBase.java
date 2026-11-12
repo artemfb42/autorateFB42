@@ -26,7 +26,7 @@ abstract class UiTestBase {
     protected static final String BASE_URL =
             System.getProperty("autorate.baseUrl", "https://buggy.justtestit.org").replaceAll("/+$", "");
     protected static final String LOGIN = System.getProperty("autorate.login", "fb42_reg1");
-    protected static final String PASSWORD = System.getProperty("autorate.password", "Pass1234a@");
+    protected static final String PASSWORD = System.getProperty("autorate.password", "Abcdef12@");
     /** First Name облікового запису fb42_reg1 — показується у привітанні «Hi, Test». */
     protected static final String FIRST_NAME = System.getProperty("autorate.firstName", "Test");
 
