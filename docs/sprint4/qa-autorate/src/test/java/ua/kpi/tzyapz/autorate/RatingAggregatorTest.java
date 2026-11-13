@@ -153,7 +153,7 @@ class RatingAggregatorTest {
         assertIterableEquals(List.of("audi R8", "BMW M1", "BMW M3", "Ferrari F40"), fullNames(top));
     }
 
-    // BUG-015 (GitHub Issue: №17): v1 вимагає > 3 голосів замість ≥ 3.
+    // BUG-015 (GitHub Issue: №19): v1 вимагає > 3 голосів замість ≥ 3.
     @ParameterizedTest(name = "BL-20: модель із {0} голосами потрапляє у список: {1}")
     @CsvSource({
             "0, false",
