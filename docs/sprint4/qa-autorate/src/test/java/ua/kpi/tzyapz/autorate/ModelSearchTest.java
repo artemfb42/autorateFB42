@@ -61,7 +61,7 @@ class ModelSearchTest {
         assertTrue(search.search(query, catalog).isEmpty());
     }
 
-    // BUG-018 (GitHub Issue: вписати номер після створення): v1 повертає весь каталог для порожнього запиту.
+    // BUG-018 (GitHub Issue: 17): v1 повертає весь каталог для порожнього запиту.
     @ParameterizedTest(name = "BL-60: порожній або пробільний запит «{0}» → порожній результат")
     @ValueSource(strings = {"", " ", "   ", "\t"})
     void blankQueryGivesEmptyResult(String query) {
@@ -76,7 +76,7 @@ class ModelSearchTest {
         assertThrows(IllegalArgumentException.class, () -> search.search("lam", null));
     }
 
-    // BUG-019 (GitHub Issue: вписати номер після створення): v1 сортує за зростанням рейтингу.
+    // BUG-019 (GitHub Issue: 18): v1 сортує за зростанням рейтингу.
     @Test
     @DisplayName("BL-70: sortByRating — за рейтингом за спаданням")
     void sortsByRatingDescending() {
