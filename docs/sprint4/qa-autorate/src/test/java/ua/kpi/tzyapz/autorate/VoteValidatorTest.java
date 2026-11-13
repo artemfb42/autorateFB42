@@ -1,6 +1,7 @@
 package ua.kpi.tzyapz.autorate;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -13,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Юніт-тести класу VoteValidator (SRS 1.1, розділ 5).
- * BL-30, BL-40 — автор Фощій Дмитро (СМ).
+ * BL-30, BL-40 — автор Фощій Дмитро (СМ); BL-50, BL-80 — автор Бурмай Юлія (ТА).
  * У тестах одного правила решта параметрів коректна, щоб тест мав одну причину впасти:
- * для BL-30/BL-40 коментар «Гарна модель».
+ * для BL-30/BL-40 коментар «Гарна модель»; для BL-50/BL-80 оцінка 3 і порожній existingVotes.
  */
 @Tag("unit")
 @DisplayName("VoteValidator — перевірка голосу (BL-30, BL-40, BL-50, BL-80)")
@@ -24,6 +25,8 @@ class VoteValidatorTest {
     private static final String DUPLICATE = "повторний голос";
     private static final String RATING_OUT_OF_RANGE = "оцінка поза межами 1..5";
     private static final String COMMENT = "Гарна модель";
+    private static final String TOO_LONG = "коментар задовгий";
+    private static final String STOP_WORD = "недопустиме слово";
 
     private VoteValidator validator;
 
@@ -115,5 +118,101 @@ class VoteValidatorTest {
     void nullExistingVotesThrow() {
         assertThrows(IllegalArgumentException.class,
                 () -> validator.validate("u1", "m1", 4, COMMENT, null));
+    }
+
+    // ============ BL-50, BL-80: довжина коментаря і стоп-список — автор Бурмай Юлія ============
+
+    private List<String> validateComment(String comment) {
+        return validator.validate("u1", "m1", 3, comment, List.of());
+    }
+
+    @ParameterizedTest(name = "BL-50: коментар із {0} символів приймається")
+    @ValueSource(ints = {1, 199, 200})
+    void commentUpToTwoHundredCharactersIsAccepted(int length) {
+        // arrange
+        String comment = "a".repeat(length);
+        // act
+        List<String> errors = validateComment(comment);
+        // assert
+        assertTrue(errors.isEmpty(), "Порушення: " + errors);
+    }
+
+    @ParameterizedTest(name = "BL-50: коментар із {0} символів → «коментар задовгий»")
+    @ValueSource(ints = {201, 202, 1000})
+    void commentLongerThanTwoHundredCharactersIsRejected(int length) {
+        String comment = "a".repeat(length);
+
+        List<String> errors = validateComment(comment);
+
+        assertTrue(errors.contains(TOO_LONG), "Порушення: " + errors);
+    }
+
+    @Test
+    @DisplayName("BL-50: 200 кириличних символів приймається (довжина рахується в символах, не в байтах)")
+    void twoHundredCyrillicCharactersAreAccepted() {
+        String comment = "я".repeat(200);
+
+        List<String> errors = validateComment(comment);
+
+        assertFalse(errors.contains(TOO_LONG), "Порушення: " + errors);
+    }
+
+    @Test
+    @Disabled("RD-09 очікує рішення замовника: SRS 1.0 і модуль v1 дозволяють порожній коментар, "
+            + "SRS 1.1 (BL-50) вимагає повідомлення «коментар обов'язковий». Увімкнути після погодження RD-09.")
+    @DisplayName("BL-50 (SRS 1.1, RD-09): порожній коментар, null і лише пробіли → «коментар обов'язковий»")
+    void emptyCommentIsRejectedAsRequired() {
+        assertAll("порожній коментар",
+                () -> assertTrue(validateComment("").contains("коментар обов'язковий")),
+                () -> assertTrue(validateComment(null).contains("коментар обов'язковий")),
+                () -> assertTrue(validateComment("   ").contains("коментар обов'язковий")));
+    }
+
+    @ParameterizedTest(name = "BL-80: «{0}» містить окреме стоп-слово → «недопустиме слово»")
+    @ValueSource(strings = {
+            "this is spam",
+            "SCAM!",
+            "Best Casino ever",
+            "це казино, не рейтинг",
+            "КАЗИНО",
+            "anti-spam",
+            "spam"
+    })
+    void commentWithStopWordIsRejected(String comment) {
+        List<String> errors = validateComment(comment);
+
+        assertTrue(errors.contains(STOP_WORD), "Порушення: " + errors);
+    }
+
+    @ParameterizedTest(name = "BL-80: «{0}» — стоп-слово лише як частина іншого слова → приймається")
+    @ValueSource(strings = {
+            "spammer",
+            "scammers everywhere",
+            "casinos",
+            "казинове місто",
+            "Чудова машина, швидка і надійна"
+    })
+    void stopWordInsideAnotherWordIsAccepted(String comment) {
+        List<String> errors = validateComment(comment);
+
+        assertFalse(errors.contains(STOP_WORD), "Порушення: " + errors);
+    }
+
+    @Test
+    @DisplayName("BL-80: власний стоп-список через конструктор замінює список за замовчуванням")
+    void customStopListReplacesDefault() {
+        VoteValidator custom = new VoteValidator(List.of("Lada"));
+
+        assertAll("власний стоп-список",
+                () -> assertTrue(custom.validate("u1", "m1", 3, "стара lada", List.of()).contains(STOP_WORD),
+                        "слово з власного списку має відхилятися без урахування регістру"),
+                () -> assertFalse(custom.validate("u1", "m1", 3, "this is spam", List.of()).contains(STOP_WORD),
+                        "слово зі списку за замовчуванням більше не заборонене"));
+    }
+
+    @Test
+    @DisplayName("BL-80 / розд. 5: null замість колекції стоп-слів → IllegalArgumentException")
+    void nullStopListThrows() {
+        assertThrows(IllegalArgumentException.class, () -> new VoteValidator(null));
     }
 }
