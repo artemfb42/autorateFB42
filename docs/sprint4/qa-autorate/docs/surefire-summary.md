@@ -10,11 +10,11 @@
 | `ExampleTest` (зразок із пакета модуля) | 5 | 0 | 0 | 0 | — |
 | `ModelSearchTest` | 20 | 5 | 0 | 0 | `blankQueryGivesEmptyResult[1..4]` → BUG-018; `sortsByRatingDescending` → BUG-019 |
 | `RatingAggregatorTest` | 34 | 5 | 0 | 0 | `roundsHalfUpToOneDecimal[1..4]` → BUG-014; `modelNeedsAtLeastThreeVotes[3]` → BUG-015 |
-| `VoteValidatorTest` | 45 | 2 | 0 | 1 | `sameUserOtherModelIsAccepted` → BUG-016; `ratingWithinRangeIsAccepted[5]` → BUG-017; Skipped: `emptyCommentIsRejectedAsRequired` (RD-09) |
-| **Разом** | **104** | **12** | **0** | **1** | 6 тест-методів → 6 звітів про дефекти |
+| `VoteValidatorTest` | 37 | 2 | 0 | 1 | `sameUserOtherModelIsAccepted` → BUG-016; `ratingWithinRangeIsAccepted[5]` → BUG-017; Skipped: `emptyCommentIsRejectedAsRequired` (RD-09) |
+| **Разом** | **96** | **12** | **0** | **1** | 6 тест-методів → 6 звітів про дефекти |
 
-Surefire рахує кожен набір даних параметризованого тесту окремо, тому 48 тест-методів дають 104 запуски,
-а 6 червоних методів — 12 Failures. Підсумок збірки — `BUILD FAILURE`: це очікуваний стан для v1, бо кожен
+Surefire рахує кожен набір даних параметризованого тесту окремо, тому 43 тест-методів дають 96 запуски,
+а 6 червоних методів — 12 Failures (`ExampleTest` — 3 методи, 5 запусків; тест-класи команди — 40 методів, 91 запуск). Підсумок збірки — `BUILD FAILURE`: це очікуваний стан для v1, бо кожен
 червоний тест відповідає зареєстрованому дефекту модуля. Errors має бути 0.
 
 
@@ -50,6 +50,13 @@ Surefire рахує кожен набір даних параметризова�
 
 Очікуваний підсумок — `BUILD SUCCESS`. Попередження `Unable to find CDP implementation matching 157` виводить Selenium 4.21.0, бо не знає DevTools-протоколу Chrome 157; тести CDP не використовують, на результат воно не впливає. Стабільність: набір запускається тричі поспіль, результати трьох запусків:
 
+| Запуск | Завершено (`Finished at`) | Tests run / Failures / Errors / Skipped | Підсумок | Тривалість |
+|---|---|---|---|---|
+| 1 | 2026-11-12T17:44:20+02:00 | 10 / 0 / 0 / 0 | BUILD SUCCESS | 1:39 min |
+| 2 | 2026-11-12T17:47:05+02:00 | 10 / 0 / 0 / 0 | BUILD SUCCESS | 1:41 min |
+| 3 | 2026-11-12T17:49:52+02:00 | 10 / 0 / 0 / 0 | BUILD SUCCESS | 1:38 min |
+
+Коміт, на якому виконано три запуски: `cc8edf5` (виправлено пароль за замовчуванням у `UiTestBase`).
 
 ### 3.1. Запуски під час налагодження (12.11.2026)
 
@@ -90,5 +97,3 @@ function Run-Suite([string]$name, [string[]]$mvnArgs) {
 Run-Suite "Юніт-набір" @("clean","test")
 1..3 | ForEach-Object { Run-Suite "UI, запуск $_" @("test","-Dgroups=ui","-DexcludedGroups=none"); Start-Sleep -Seconds 60 }
 ```
-
-Рядок «Юніт-набір» → розділ 1 (дата, тривалість), рядки «UI, запуск 1–3» → таблиця розділу 3, коміт — у розділи 1 і 3.
