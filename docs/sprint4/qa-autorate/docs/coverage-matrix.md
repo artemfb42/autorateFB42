@@ -120,7 +120,7 @@
 |---|---|---|---|---|---|---|
 | BL-10, `RatingAggregatorTest` | Собко Артем | [#14](https://github.com/artemfb42/autorateFB42/pull/14) | Фощій Дмитро | ‹дд.мм.2026› | ‹ок / зауваження› | ‹посилання на review, коміт› |
 | BL-20, `RatingAggregatorTest` | Бурмай Юлія | коміт [3496224](https://github.com/artemfb42/autorateFB42/commit/3496224) (без PR) | Фощій Дмитро | ‹дд.мм.2026› | ‹ок / зауваження› | ‹посилання на review, коміт› |
-| BL-30, BL-40, `VoteValidatorTest` | Фощій Дмитро | [#23](https://github.com/artemfb42/autorateFB42/pull/23) | Собко Артем | ‹дд.мм.2026› | ‹ок / зауваження› | ‹посилання на review, коміт› |
+| BL-30, BL-40, `VoteValidatorTest` | Фощій Дмитро | [#23](https://github.com/artemfb42/autorateFB42/pull/23) | Собко Артем | 16.11.2026 | ок | Зауважень немає; виправлення не потрібні |
 | BL-50, BL-80, `VoteValidatorTest` | Бурмай Юлія | [#24](https://github.com/artemfb42/autorateFB42/pull/24) | Фощій Дмитро | ‹дд.мм.2026› | ‹ок / зауваження› | ‹посилання на review, коміт› |
 | BL-60, BL-70, `ModelSearchTest` | Деркач Юрій | [#20](https://github.com/artemfb42/autorateFB42/pull/20) | Фощій Дмитро | ‹дд.мм.2026› | ‹ок / зауваження› | ‹посилання на review, коміт› |
 | UI: `RegistrationUiTest`, `LoginUiTest`, `CatalogUiTest`, Page Object, Selenium IDE | Деркач Юрій, Бурмай Юлія | коміти [436e2fd](https://github.com/artemfb42/autorateFB42/commit/436e2fd), [9889da4](https://github.com/artemfb42/autorateFB42/commit/9889da4) (без PR) | Фощій Дмитро | ‹дд.мм.2026› | ‹ок / зауваження› | ‹посилання на review, коміт› |
