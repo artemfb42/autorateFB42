@@ -3,13 +3,14 @@
 **Спринт 4, команда $Win (ФБ-42).**  
 Відповідальна: Бурмай Юлія (ТА). Джерело правил — [SRS 1.1, розділ 5](../../../sprint2/SRS-1.1.md).  
 Тест-класи — по одному на клас модуля (методичка, п. 4.8) у `docs/sprint4/qa-autorate/src/test/java/ua/kpi/tzyapz/autorate/`:
-`RatingAggregatorTest` (BL-10, BL-20), `VoteValidatorTest` (BL-30…BL-50, BL-80, контракт розд. 5), `ModelSearchTest` (BL-60, BL-70).
+`RatingAggregatorTest` (BL-10, BL-20), `VoteValidatorTest` (BL-30…BL-50, BL-80), `ModelSearchTest` (BL-60, BL-70).
 Усередині класу тести кожного автора згруповано в окремий блок із коментарем-заголовком.
 
 Позначення в колонці «v1» (результат `mvn clean test` на модулі v1), як у журналі виконання спринта 3:
 **passed** — тест проходить; **failed** — тест падає, поруч ID звіту про дефект і номер Issue;
 **skipped** — тест вимкнено з причиною (`@Disabled`).
-Колонку «Рецензент» заповнює рецензент після схвалення pull request за чек-листом 5.3 (дата + «ок» або посилання на PR із зауваженнями).
+Колонка «Рецензент» — учасник, який рецензує блок за чек-листом 5.3 (автор блоку не рецензує власні тести).
+Дата, результат і посилання на review в pull request для кожного блоку — у [журналі code review](#журнал-code-review) наприкінці файлу.
 
 
 ## BL-10. `RatingAggregator.average` — тест-клас `RatingAggregatorTest` (автор блоку: Собко Артем)
@@ -69,16 +70,6 @@
 вимкнено з поясненням (`@Disabled("RD-09 …")`, у звіті — `Skipped: 1`); довжину 200/201 обидві редакції описують однаково,
 тому ці тести активні. Після погодження RD-09 тест вмикається; якщо v2 не реалізує правило — оформлюється звіт.
 
-## Розд. 5 і `containsStopWord`. Контракт методів `VoteValidator` — тест-клас `VoteValidatorTest` (автор блоку: Бурмай Юлія)
-
-| Вимога | Правило | Вид перевірки | Вхідні дані → очікуване | Тест-метод | v1 | Рецензент |
-|---|---|---|---|---|---|---|
-| розд. 5 | `userId = null` → IllegalArgumentException | заборонений вхід | `validate(null, "m1", 3, …)` | `nullUserIdThrows` | passed | Фощій Дмитро |
-| розд. 5 | `modelId = null` → IllegalArgumentException | заборонений вхід | `validate("u1", null, 3, …)` | `nullModelIdThrows` | passed | Фощій Дмитро |
-| BL-80 | Немає слів — немає стоп-слів | окремий клас даних (`assertAll`) | `containsStopWord(null)`, `("")`, `("   ")` → false | `containsStopWordIsFalseForNullOrBlank` | passed | Фощій Дмитро |
-| BL-80 | Стоп-слово між розділовими знаками — окреме слово | межа правила «ціле слово» | «(spam)», «spam.», «КАЗИНО?», «ok,scam,ok» → true | `containsStopWordFindsWordBetweenPunctuation` (4 набори) | passed | Фощій Дмитро |
-| BL-50 + BL-80 | Два незалежні порушення в одному коментарі | пов'язані властивості | «spam » + 200 літер (205 символів) → «коментар задовгий» і «недопустиме слово» | `longCommentWithStopWordReportsBothViolations` | passed | Фощій Дмитро |
-
 ## BL-60, BL-70. `ModelSearch` — тест-клас `ModelSearchTest` (автор: Деркач Юрій)
 
 | Вимога | Правило | Вид перевірки | Вхідні дані → очікуване | Тест-метод | v1 | Рецензент |
@@ -100,13 +91,36 @@
 | `RatingAggregatorTest` | topN | Бурмай Юлія (ТА) | BL-20 | 8 | 2 | 1 (BUG-015 #19) | Фощій Дмитро |
 | `VoteValidatorTest` | повторний голос, оцінка | Фощій Дмитро (СМ) | BL-30, BL-40 | 8 | 2 | 2 (BUG-016 #22, BUG-017 #21) | Собко Артем |
 | `VoteValidatorTest` | коментар, стоп-список | Бурмай Юлія (ТА) | BL-50, BL-80 | 8 (1 вимкнено) | 4 | 0 | Фощій Дмитро |
-| `VoteValidatorTest` | контракт, containsStopWord | Бурмай Юлія (ТА) | розд. 5, BL-50, BL-80 | 5 | 1 | 0 | Фощій Дмитро |
 | `ModelSearchTest` | search, sortByRating | Деркач Юрій (ІТ) | BL-60, BL-70 | 8 | 3 | 2 (BUG-018 #17, BUG-019 #18) | Фощій Дмитро |
-| **Разом** | | | BL-10…BL-80 | **45** | 17 | 6 методів → 6 дефектів | |
+| **Разом** | | | BL-10…BL-80 | **40** | 16 | 6 методів → 6 дефектів | |
 
-Норматив для 5 осіб: ≥20 юніт-тестів (факт 45), ≥3 на особу (Собко 8, Бурмай 16, Фощій 8, Найда 5, Деркач 8),
-≥5 дефектів із 6 (факт 6). `ExampleTest` із пакета модуля (3 тест-методи, 5 запусків) лишається у проєкті,
-але в норматив не зараховується. Тривіальні елементи без тестів: записи `Vote` і `CarModel` (без логіки);
-`CarModel.fullName()` перевіряється опосередковано через сортування; `VoteValidator.isValid` — у `validFirstVoteIsAccepted`
-і `sameUserSameModelIsRejectedAsDuplicate`.
+Норматив для 5 осіб: ≥20 юніт-тестів (факт 40 тест-методів, 91 запуск Surefire), ≥5 дефектів із 6 закладених
+(факт 6, усі мають звіт у GitHub Issues і червоний тест). ≥3 юніт-тести на особу.
+`ExampleTest` із пакета модуля (3 тест-методи, 5 запусків) лишається у проєкті, але в норматив не зараховується.
 
+Тривіальні елементи без окремих тестів: записи `Vote` і `CarModel` (без логіки); `CarModel.fullName()` перевіряється опосередковано
+через сортування (`tiesAreOrderedByFullNameIgnoringCase`, `equalRatingsAreOrderedByFullNameIgnoringCase`); `VoteValidator.isValid` —
+у `validFirstVoteIsAccepted` і `sameUserSameModelIsRejectedAsDuplicate`.
+
+## UI-сценарії (Selenium WebDriver, тег `ui`)
+
+Простежуваність «TC → вимоги → тест-метод» для 10 UI-сценаріїв (норматив ≥8) — у [ui-scenarios.md](ui-scenarios.md), розд. 2;
+результат запуску 12.11.2026 (10 / 0 / 0 / 0) — у [surefire-summary.md](surefire-summary.md), розд. 3.
+Сценарії Selenium IDE (TC-005, TC-027) — `selenium-ide/autorate.side`, експорт у Java JUnit — `selenium-ide/export/`.
+
+## Журнал code review
+
+Рецензент проходить чек-лист 5.3 (ID вимоги в `@DisplayName`, очікування зі специфікації, межі з обох боків,
+`assertThrows` для винятків, немає «підігнаних» значень і `@Disabled` без причини, для UI — явні очікування й стійкі локатори),
+залишає review у pull request блоку (Files changed → коментарі до рядків → Review changes) або, для блоків, злитих без PR,
+коментарі до коміту (сторінка коміту → коментар під diff). Потім вписує сюди дату, результат і посилання.
+Зауваження виправляє автор окремим комітом; номер коміту — у колонці «Виправлення».
+
+| Блок | Автор | PR | Рецензент | Дата review | Результат | Зауваження → виправлення |
+|---|---|---|---|---|---|---|
+| BL-10, `RatingAggregatorTest` | Собко Артем | [#14](https://github.com/artemfb42/autorateFB42/pull/14) | Фощій Дмитро | ‹дд.мм.2026› | ‹ок / зауваження› | ‹посилання на review, коміт› |
+| BL-20, `RatingAggregatorTest` | Бурмай Юлія | коміт [3496224](https://github.com/artemfb42/autorateFB42/commit/3496224) (без PR) | Фощій Дмитро | ‹дд.мм.2026› | ‹ок / зауваження› | ‹посилання на review, коміт› |
+| BL-30, BL-40, `VoteValidatorTest` | Фощій Дмитро | [#23](https://github.com/artemfb42/autorateFB42/pull/23) | Собко Артем | ‹дд.мм.2026› | ‹ок / зауваження› | ‹посилання на review, коміт› |
+| BL-50, BL-80, `VoteValidatorTest` | Бурмай Юлія | [#24](https://github.com/artemfb42/autorateFB42/pull/24) | Фощій Дмитро | ‹дд.мм.2026› | ‹ок / зауваження› | ‹посилання на review, коміт› |
+| BL-60, BL-70, `ModelSearchTest` | Деркач Юрій | [#20](https://github.com/artemfb42/autorateFB42/pull/20) | Фощій Дмитро | ‹дд.мм.2026› | ‹ок / зауваження› | ‹посилання на review, коміт› |
+| UI: `RegistrationUiTest`, `LoginUiTest`, `CatalogUiTest`, Page Object, Selenium IDE | Деркач Юрій, Бурмай Юлія | коміти [436e2fd](https://github.com/artemfb42/autorateFB42/commit/436e2fd), [9889da4](https://github.com/artemfb42/autorateFB42/commit/9889da4) (без PR) | Фощій Дмитро | ‹дд.мм.2026› | ‹ок / зауваження› | ‹посилання на review, коміт› |
